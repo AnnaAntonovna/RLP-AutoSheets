@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+	<AddIn Type="Application">
+		<Name>RLP</Name>
+		<Assembly>C:\Program Files (x86)\RLP plugin\rlp.dll</Assembly>
+		<AddInId>780e9491-8b5a-4c48-88dc-954b4dc0ad1e</AddInId>
+		<FullClassName>RLP.TabPanel</FullClassName>
+		<VendorId>Anna Baranova</VendorId>
+		<VendorDescription>Вы поймали ошибку, которую мы еще не видели! Пожалуйста, поделитесь этим прекрасным открытием с нами! Сообщите о проблеме разработчику и опишите ее по адресу - an2baranova@gmail.com. А пока вы ждете ответа, убедитесь, что действовали по инструкции. Приятного пользования!</VendorDescription>
+		<VendorUrl>an2baranova@gmail.com</VendorUrl>
+		<Description>Оформление сборного железобетона</Description>
+		<HelpUrl>https://youtu.be/2S7BvkDN0hw</HelpUrl>
+		<AdditionalParameters>
+			<Parameter Name="InstallationInstructions" Value="Этот плагин разработан под единственный проект и использует семейства указанные в документе. При потребности функционал может быть расширен и автоматизирован. Пожалуйста, убедитесь, что семейства присутствуют в вашем проекте - https://docs.google.com/document/d/1XSuGZPAVDd4CYYRjAV7cf1zsgPAk6nKc/edit" />
+			<Parameter Name="ErrorInstructions" Value="Вы поймали ошибку, которую мы еще не видели! Пожалуйста, поделитесь этим прекрасным открытием с нами! Сообщите о проблеме разработчику и опишите ее по адресу - an2baranova@gmail.com. А пока вы ждете ответа, убедитесь, что действовали по инструкции. Приятного пользования!" />
+		</AdditionalParameters>
+	</AddIn>
+</RevitAddIns>
