@@ -45,9 +45,10 @@ namespace RLP
 
             //Create buttons
 
-            CreateButton("Виды и листы", 1, $"RLP.Views", panel1, "Wow - a tooltip!");
-            CreateButton("Проставление\nмарок", 2, $"RLP.Annotations", panel1, "Wow - a tooltip!");
-            CreateButton("Тест", 3, $"RLP.Test", panel1, "Wow - a tooltip!");
+            CreateButton("Виды и листы", 1, $"RLP.Combine", panel1, "Выберите сборку и кнопка создаст листы и фасады к ней");
+            CreateButton("Проставление\nмарок", 2, $"RLP.Annotations", panel1, "Проставит марки для элементов сборки на активном виде (в прогрессе)");
+            CreateButton("Изменить марки\nпо умолчанию", 3, $"RLP.LoadedTagsAndSymbols", panel1, "Загруженные в проект марки");
+            //CreateButton("Тест", 3, $"RLP.CreateAssemblySection", panel1, "Wow - a tooltip!");
 
             return Result.Succeeded;
         }

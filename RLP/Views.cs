@@ -37,6 +37,7 @@ namespace RLP
                 {
                     string assebmlyName = assemblyInstance.Name;
                     string viewName = $"Наружная стеновая панель {assebmlyName}. Опалубка";
+                    bool newViews = true;
 
                     // Check if the view already exists
                     bool viewExists = new FilteredElementCollector(doc).OfClass(typeof(View)).Cast<View>().Any(x => x.Name == viewName);
@@ -44,11 +45,11 @@ namespace RLP
                     // Ask the user if they want to create the view anyway
                     if (viewExists)
                     {
-                        TaskDialogResult overwriteResult = TaskDialog.Show("View already exists", "A view with the same name already exists. Do you want to create a new view with a different name?", TaskDialogCommonButtons.Yes | TaskDialogCommonButtons.No);
+                        TaskDialogResult overwriteResult = TaskDialog.Show("Вид уже существует", $"Вид {viewName} уже существует. Хотите создать новый вид с другим именем ({viewName} (1))?", TaskDialogCommonButtons.Yes | TaskDialogCommonButtons.No);
 
                         if (overwriteResult == TaskDialogResult.No)
                         {
-                            return Result.Cancelled;
+                            newViews = false;
                         }
                         else
                         {
@@ -62,70 +63,110 @@ namespace RLP
                         }
                     }
 
-                    using (Transaction trans = new Transaction(doc, "Создать виды сборки"))
+                    using (Transaction trans = new Transaction(doc, "Создать опалубку"))
                     {
                         trans.Start();
                         
+                        /////Creation of oopalubka
+
                         ViewSheet sheet = CreateNewSheet(assebmlyName);
+                        ViewSection sectionViewBack = null;
 
+                        if (newViews)
+                        {
+                            // Create a section view of the assembly instance type elevation back
+                            sectionViewBack = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.ElevationBack);
+                            sectionViewBack.Name = viewName;
+                            ApplyViewTemplate(sectionViewBack, "3НСНг_Панель_Фасад_Опалубка");
+                            sectionViewBack.get_Parameter(BuiltInParameter.VIEW_NAME).Set(viewName);
+                            sectionViewBack.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set(assebmlyName);
+                            // Get the view you want to modify
+                            View viewToModify = sectionViewBack;
 
-                        // Create a section view of the assembly instance Type A
-                        ViewSection sectionView = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.DetailSectionA);
-                        sectionView.Name = "Section View of " + assemblyInstance.Name;
-                        ApplyViewTemplate(sectionView, "3НСНг_Панель_Фасад_Опалубка");
+                            // Get all elements in the view that have the same name as the view
+                            List<ElementId> elementsToHide = new FilteredElementCollector(doc)
+                                .OfClass(typeof(View))
+                                .Where(v => v.Name == viewName)
+                                .Select(v => v.Id)
+                                .ToList();
 
-                        // Create a section view of the assembly instance type B
-                        ViewSection sectionViewB = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.DetailSectionB);
-                        sectionView.Name = "Section View of " + assemblyInstance.Name;
-                        ApplyViewTemplate(sectionViewB, "3НСНг_Панель_Фасад_Опалубка");
-
-                        // Create a section view of the assembly instance elevation front
-                        ViewSection sectionViewFront = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.ElevationFront);
-                        sectionView.Name = "Section View of " + assemblyInstance.Name;
-                        ApplyViewTemplate(sectionViewFront, "3НСНг_Панель_Фасад_Опалубка");
-
-                        // Create a section view of the assembly instance type elevation back
-                        ViewSection sectionViewBack = AssemblyViewUtils.CreateDetailSection(doc, assemblyInstance.Id, AssemblyDetailViewOrientation.ElevationBack);
-                        sectionViewBack.Name = viewName;
-                        ApplyViewTemplate(sectionViewBack, "3НСНг_Панель_Фасад_Опалубка");
-                        sectionViewBack.get_Parameter(BuiltInParameter.VIEW_NAME).Set(viewName);
-                        sectionViewBack.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set(assebmlyName);
-                        
-                        
-
-                        // Get the view you want to modify
-                        View viewToModify = sectionViewBack;
-
-                        // Get all elements in the view that have the same name as the view
-                        List<ElementId> elementsToHide = new FilteredElementCollector(doc)
+                            try { viewToModify.HideElements(elementsToHide); } catch { elementsToHide.Clear(); elementsToHide.Add(viewToModify.Id); }
+                            try { viewToModify.HideElements(elementsToHide); } catch { }
+                            try { viewToModify.HideElements((ICollection<ElementId>)viewToModify.Id); } catch { }
+                        }
+                        else 
+                        {
+                            sectionViewBack = (ViewSection)new FilteredElementCollector(doc)
                             .OfClass(typeof(View))
-                            .Where(v => v.Name == viewName)
-                            .Select(v => v.Id)
-                            .ToList();
+                            .Cast<View>()
+                            .FirstOrDefault(view => view.Name.Equals(viewName));
 
-                        try { viewToModify.HideElements(elementsToHide); } catch { }
-                        try { viewToModify.HideElements((ICollection<ElementId>)viewToModify.Id); } catch { }
+                            FilteredElementCollector sheetCollector = new FilteredElementCollector(doc).OfClass(typeof(ViewSheet));
+
+                            // Loop through each sheet
+                            foreach (ViewSheet anysheet in sheetCollector)
+                            {
+                                // Check if the view is present in any of the viewports
+                                foreach (ElementId viewportId in anysheet.GetAllViewports())
+                                {
+                                    Viewport viewport1 = (Viewport)doc.GetElement(viewportId);
+                                    if (viewport1.ViewId == sectionViewBack.Id)
+                                    {
+                                        // The view is already on a sheet
+                                        TaskDialog.Show("Вид на листе", $"Вид {sectionViewBack.Name} уже размещен на листе. Название листа: " + sheet.Name);
+                                        return Result.Failed;
+                                    }
+                                }
+                            }
+                        }
+
+                        Viewport viewport = Viewport.Create(doc, sheet.Id, sectionViewBack.Id, new XYZ(0, 0, 0 ));
+                        //viewport.LabelOffset = XYZ.Zero;
+
+                        //TaskDialogResult overwriteResult = TaskDialog.Show("Выровнять вид", $"Выровнять вид на листе?", TaskDialogCommonButtons.Yes | TaskDialogCommonButtons.No);
+
+                        //if (overwriteResult == TaskDialogResult.No)
+                        //{
+                        //    newViews = false;
+                        //}
+                        //else
+                        //{
+                            // Get the outline of the sheet
+                            //var outline = sheet.Outline;
+                            var viewOutline = viewport.GetBoxOutline();
 
 
-                        // Add the view to the sheet
-                        BoundingBoxXYZ boundingBox = sheet.get_BoundingBox(null);
-                        XYZ center = - (boundingBox.Max + boundingBox.Min) / 2;
-                        Viewport viewport = Viewport.Create(doc, sheet.Id, sectionViewBack.Id, center);
-                        
+                            // get the sheet outline and viewport bounding box
+                            BoundingBoxUV sheetBox = sheet.Outline;
+                            BoundingBoxXYZ viewportBox = viewport.get_BoundingBox(sheet);
+
+                            // calculate the center points
+                            UV sheetCenter = (sheetBox.Max + sheetBox.Min) / 2;
+                            XYZ viewportCenter = (viewportBox.Max + viewportBox.Min) / 2;
+
+                            // calculate the offset to center the viewport on the sheet
+                            double offsetX = sheetCenter.U - viewportCenter.X;
+                            double offsetY = sheetCenter.V - viewportCenter.Y;
+
+                            // set the viewport position
+                            viewport.SetBoxCenter(new XYZ(viewportBox.Max.X + offsetX * 2.5, viewportBox.Max.Y - offsetY, 0));
+
+                        //}
+
+                        // set the label offset to top and center
+                        //XYZ labelOffset = new XYZ(viewportBox.Max.X + offsetX * 2.5, viewportBox.Max.Y * 2 - offsetY, 0);
+                        //viewport.LabelOffset = labelOffset;
+
                         SetViewportType(sectionViewBack, "Заголовок на листе");
 
                         trans.Commit();
+
                         try
                         {
                             // Show the newly created views
-                            uiDoc.ActiveView = sectionView;
-                            uiDoc.ActiveView = sectionViewB;
-                            uiDoc.ActiveView = sectionViewFront;
                             uiDoc.ActiveView = sectionViewBack;
                             uiDoc.ActiveView = sheet;
                             var ports = sheet.GetAllViewports();
-                            TaskDialog.Show("ViewPorst", ports.First().ToString());
-
 
                         }
                         catch (Exception ex)
@@ -136,6 +177,9 @@ namespace RLP
                             taskDialog.Show();
                         }
                     }
+
+
+
 
                     return Result.Succeeded;
                 }
@@ -225,7 +269,7 @@ namespace RLP
                         {
                             ;
                             ElementType type = doc.GetElement(id) as ElementType;
-                            TaskDialog.Show("Tak", type.Name);
+                            //TaskDialog.Show("Tak", type.Name);
                             if (type.Name == viewportTypeName)
                             {
                                 scaledViewPortType = type;
