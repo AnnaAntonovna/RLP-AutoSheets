@@ -63,7 +63,7 @@
     <Compile Include="PostableCMD.cs" />
     <Compile Include="TabPanel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Test.cs" />
+    <Compile Include="Sections.cs" />
     <Compile Include="Views.cs" />
   </ItemGroup>
   <ItemGroup>
