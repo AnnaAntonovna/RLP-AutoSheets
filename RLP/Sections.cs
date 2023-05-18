@@ -250,7 +250,23 @@ namespace RLP
             return centerPoints;
         }
 
+        public static bool IsViewOnSheet(View targetView, ViewSheet targetSheet)
+        {
+            // Get all the viewports on the target sheet
+            IEnumerable<Viewport> viewports = new FilteredElementCollector(targetSheet.Document)
+                .OfCategory(BuiltInCategory.OST_Viewports)
+                .Cast<Viewport>();
 
+            // Check if the target view is already placed on the sheet
+            bool isViewOnSheet = viewports.Any(vp => vp.ViewId == targetView.Id);
+
+            if (isViewOnSheet)
+            {
+                TaskDialog.Show("Вид уже есть на листе", $"Вид {targetView.Name} уже расположен на листе {targetSheet.Name}");
+            }
+
+            return isViewOnSheet;
+        }
 
         public static List<XYZ> GetPointsForHorizontalSections(Wall wall, Document doc)
         {

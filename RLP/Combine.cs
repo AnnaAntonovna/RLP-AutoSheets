@@ -92,109 +92,95 @@ namespace RLP
             }
 
 
-
-            TaskDialogResult result = TaskDialog.Show("Выбор", "Выберите сборку", TaskDialogCommonButtons.Ok | TaskDialogCommonButtons.Cancel);
-
-            if (result == TaskDialogResult.Cancel || result == TaskDialogResult.No)
+            foreach (AssemblyInstance assemblyInstance in assemblies)
             {
-                return Result.Cancelled;
-            }
-
-            // Get an assembly instance from the user
-            Reference assemblyRef = uiDoc.Selection.PickObject(ObjectType.Element, new AssemblySelectionFilter(), "Выберите сборку");
-            AssemblyInstance assemblyInstance = doc.GetElement(assemblyRef) as AssemblyInstance;
-            //var window = new BlockingWindow();
-            //window.Show("Processing...");
-
-
-
-            try
-            {
-                if (assemblyInstance != null)
+                try
                 {
-                    //INFOOO
-
-                    string assebmlyName = assemblyInstance.Name;
-
-                    List<ViewSheet> sheets = new List<ViewSheet>(); // list of sheets
-                    List<ViewSection> facades = new List<ViewSection>();  // list of lists of facades, where each inner list corresponds to a sheet in the sheets list
-                    List<ViewSection> horizontalSectionsZNSN1 = new List<ViewSection>();
-                    List<ViewSection> verticalSectionsZNSN1 = new List<ViewSection>();
-
-                    List<ViewSection> horizontalSectionsZNSN2 = new List<ViewSection>();
-                    List<ViewSection> verticalSectionsZNSN2 = new List<ViewSection>();
-
-                    List<ViewSection> horizontalSectionsZNSN4 = new List<ViewSection>();
-
-                    List<ViewSection> horizontalSectionsZNSNэ = new List<ViewSection>();
-
-
-                    /////SHEEEEEEEEEEEEEETTSS
-                    ///
-                    using (Transaction tx = new Transaction(doc, "CreateSheets"))
+                    if (assemblyInstance != null)
                     {
-                        tx.Start();
-                        ViewSheet sheet1;
-                        try
+                        //INFOOO
+
+                        string assebmlyName = assemblyInstance.Name;
+
+                        List<ViewSheet> sheets = new List<ViewSheet>(); // list of sheets
+                        List<ViewSection> facades = new List<ViewSection>();  // list of lists of facades, where each inner list corresponds to a sheet in the sheets list
+                        List<ViewSection> horizontalSectionsZNSN1 = new List<ViewSection>();
+                        List<ViewSection> verticalSectionsZNSN1 = new List<ViewSection>();
+
+                        List<ViewSection> horizontalSectionsZNSN2 = new List<ViewSection>();
+                        List<ViewSection> verticalSectionsZNSN2 = new List<ViewSection>();
+
+                        List<ViewSection> horizontalSectionsZNSN4 = new List<ViewSection>();
+
+                        List<ViewSection> horizontalSectionsZNSNэ = new List<ViewSection>();
+
+
+                        /////SHEEEEEEEEEEEEEETTSS
+                        ///
+                        using (Transaction tx = new Transaction(doc, "CreateSheets"))
                         {
-                            if (assebmlyName.Contains("3НСН"))
+                            tx.Start();
+                            ViewSheet sheet1;
+                            try
                             {
-                                sheet1 = CreateNewSheet(doc, assebmlyName, "Форма 4_Панели (масштаб 1 к 20)", 2, $"Наружная стеновая панель {assebmlyName}", "1"); sheets.Add(sheet1);
-                                ViewSheet sheet2 = CreateNewSheet(doc, assebmlyName, "Форма 6", 2, $"Наружная стеновая панель {assebmlyName}. Армирование внутреннего слоя", "2"); sheets.Add(sheet2);
-                                ViewSheet sheet3 = CreateNewSheet(doc, assebmlyName, "Форма 6", 3, $"Наружная стеновая панель {assebmlyName}. Армирование внешнего слоя", "3"); sheets.Add(sheet3);
-                                ViewSheet sheet4 = CreateNewSheet(doc, assebmlyName, "Форма 6", 3, $"Наружная стеновая панель {assebmlyName}. Схема рустовки", "4"); sheets.Add(sheet4);
-                                //ViewSheet sheet5 = CreateNewSheet(doc, assebmlyName, "Форма 6", 2, $"Наружная стеновая панель {assebmlyName}. Спецификации", "5"); sheets.Add(sheet5);
-                                tx.Commit();
-                                uiDoc.ActiveView = sheet1;
+                                if (assebmlyName.Contains("3НСН"))
+                                {
+                                    sheet1 = CreateNewSheet(doc, assebmlyName, "Форма 4_Панели (масштаб 1 к 20)", 2, $"Наружная стеновая панель {assebmlyName}", "1"); sheets.Add(sheet1);
+                                    ViewSheet sheet2 = CreateNewSheet(doc, assebmlyName, "Форма 6", 2, $"Наружная стеновая панель {assebmlyName}. Армирование внутреннего слоя", "2"); sheets.Add(sheet2);
+                                    ViewSheet sheet3 = CreateNewSheet(doc, assebmlyName, "Форма 6", 3, $"Наружная стеновая панель {assebmlyName}. Армирование внешнего слоя", "3"); sheets.Add(sheet3);
+                                    ViewSheet sheet4 = CreateNewSheet(doc, assebmlyName, "Форма 6", 3, $"Наружная стеновая панель {assebmlyName}. Схема рустовки", "4"); sheets.Add(sheet4);
+                                    //ViewSheet sheet5 = CreateNewSheet(doc, assebmlyName, "Форма 6", 2, $"Наружная стеновая панель {assebmlyName}. Спецификации", "5"); sheets.Add(sheet5);
+                                    tx.Commit();
+                                    uiDoc.ActiveView = sheet1;
+                                }
+                                else if (assebmlyName.Contains("1НСН"))
+                                {
+                                    ViewSheet sheet6 = CreateNewSheet(doc, assebmlyName, "Форма 4_Панели (масштаб 1 к 20)", 2, $"Наружная стеновая панель {assebmlyName}", "1"); sheets.Add(sheet6);
+                                    ViewSheet sheet7 = CreateNewSheet(doc, assebmlyName, "Форма 6", 2, $"Наружная стеновая панель {assebmlyName}. Армирование", "2"); sheets.Add(sheet7);
+                                    //ViewSheet sheet8 = CreateNewSheet(doc, assebmlyName, "Форма 6", 2, $"Наружная стеновая панель {assebmlyName}. Спецификации", "3"); sheets.Add(sheet8);
+                                    tx.Commit();
+                                }
+                                else if (assebmlyName.Contains("ПСВ"))
+                                {
+                                    ViewSheet sheet9 = CreateNewSheet(doc, assebmlyName, "Форма 4_Панели (масштаб 1 к 20)", 2, $"Внутренняя стеновая панель {assebmlyName}", "1"); sheets.Add(sheet9);
+                                    ViewSheet sheet10 = CreateNewSheet(doc, assebmlyName, "Форма 6", 2, $"Внутренняя стеновая панель {assebmlyName}. Армирование", "2"); sheets.Add(sheet10);
+                                    //ViewSheet sheet11 = CreateNewSheet(doc, assebmlyName, "Форма 6", 2, $"Внутренняя стеновая панель {assebmlyName}. Спецификации", "3"); sheets.Add(sheet11);
+                                    tx.Commit();
+                                }
+                                else
+                                { TaskDialog.Show("Oh..", "Название сборки не корректное. Листы не созданы"); tx.RollBack(); }
                             }
-                            else if (assebmlyName.Contains("1НСН"))
-                            {
-                                ViewSheet sheet6 = CreateNewSheet(doc, assebmlyName, "Форма 4_Панели (масштаб 1 к 20)", 2, $"Наружная стеновая панель {assebmlyName}", "1"); sheets.Add(sheet6);
-                                ViewSheet sheet7 = CreateNewSheet(doc, assebmlyName, "Форма 6", 2, $"Наружная стеновая панель {assebmlyName}. Армирование", "2"); sheets.Add(sheet7);
-                                //ViewSheet sheet8 = CreateNewSheet(doc, assebmlyName, "Форма 6", 2, $"Наружная стеновая панель {assebmlyName}. Спецификации", "3"); sheets.Add(sheet8);
-                                tx.Commit();
-                            }
-                            else if (assebmlyName.Contains("ПСВ"))
-                            {
-                                ViewSheet sheet9 = CreateNewSheet(doc, assebmlyName, "Форма 4_Панели (масштаб 1 к 20)", 2, $"Внутренняя стеновая панель {assebmlyName}", "1"); sheets.Add(sheet9);
-                                ViewSheet sheet10 = CreateNewSheet(doc, assebmlyName, "Форма 6", 2, $"Внутренняя стеновая панель {assebmlyName}. Армирование", "2"); sheets.Add(sheet10);
-                                //ViewSheet sheet11 = CreateNewSheet(doc, assebmlyName, "Форма 6", 2, $"Внутренняя стеновая панель {assebmlyName}. Спецификации", "3"); sheets.Add(sheet11);
-                                tx.Commit();
-                            }
-                            else
-                            { TaskDialog.Show("Oh..", "Название сборки не корректное. Листы не созданы"); tx.RollBack(); }
+                            catch (Exception ex) { ShowException("Can't create all sheets", ex); tx.RollBack(); }
                         }
-                        catch (Exception ex) { ShowException("Can't create all sheets", ex); tx.RollBack(); }
-                    }
 
-                    ////VIEEESSSSSSSSSSSSSS
+                        ////VIEEESSSSSSSSSSSSSS
 
-                    Wall hostWall = null;
-                    ViewSection sectionView = null;
+                        Wall hostWall = null;
+                        ViewSection sectionView = null;
 
-                    //METHODS
+                        //METHODS
 
-                    try { hostWall = GetWallHostForFirstRebarInAssembly(assemblyInstance); }
-                    catch (Exception ex) { ShowException("Can't get a wall", ex); return Result.Failed; }
+                        try { hostWall = GetWallHostForFirstRebarInAssembly(assemblyInstance); }
+                        catch (Exception ex) { ShowException("Can't get a wall", ex); return Result.Failed; }
 
 
-                    string viewportTypeName = "Заголовок на листе";
-                    string viewportTypeNameSection = "Сечение_Номер вида";
+                        string viewportTypeName = "Заголовок на листе";
+                        string viewportTypeNameSection = "Сечение_Номер вида";
 
 
-                    //Templates
+                        //Templates
 
-                    string viewTemplateName1 = "3НСНг_Панель_Фасад_Опалубка";
-                    string viewTemplateName2 = "3НСНг_Панель_Фасад_Армирование внутреннего слоя";
-                    string viewTemplateName3 = "3НСНг_Панель_Фасад_Армирование внешнего слоя";
-                    string viewTemplateName4 = "3НСНг_Панель_Фасад_Рустовка";
+                        string viewTemplateName1 = "3НСНг_Панель_Фасад_Опалубка";
+                        string viewTemplateName2 = "3НСНг_Панель_Фасад_Армирование внутреннего слоя";
+                        string viewTemplateName3 = "3НСНг_Панель_Фасад_Армирование внешнего слоя";
+                        string viewTemplateName4 = "3НСНг_Панель_Фасад_Рустовка";
 
-                    string viewTemplateName56 = "НСН-ПСВ_Панель_Фасад_Опалубка";
-                    string viewTemplateName78 = "НСН-ПСВ_Панель_Фасад_Армирование внутреннего слоя";
+                        string viewTemplateName56 = "НСН-ПСВ_Панель_Фасад_Опалубка";
+                        string viewTemplateName78 = "НСН-ПСВ_Панель_Фасад_Армирование внутреннего слоя";
 
-                    //using (Transaction tx = new Transaction(doc, "CreateFacades"))
-                    //{
-                      //tx.Start();
+                        //using (Transaction tx = new Transaction(doc, "CreateFacades"))
+                        //{
+                        //tx.Start();
 
                         if (assebmlyName.Contains("3НСН"))
                         {
@@ -203,11 +189,12 @@ namespace RLP
                             catch (Exception ex) { ShowException("Can't GetWonderfulFacade1", ex); return Result.Failed; }
 
                             try
-                            { sectionView = (ViewSection)GetWonderfulFacade(hostWall, assemblyInstance, $"Наружная стеновая панель {assebmlyName}. Армирование внутреннего слоя", viewTemplateName2, viewportTypeName, true); facades.Add(sectionView); }
+                            { sectionView = (ViewSection)GetWonderfulFacade(hostWall, assemblyInstance, $"Наружная стеновая панель {assebmlyName}. Армирование внутреннего слоя", viewTemplateName2, viewportTypeName, true); SetRebarPresentationMode(sectionView); facades.Add(sectionView);
+                                SetRebarPresentationMode(sectionView);}
                             catch (Exception ex) { ShowException("Can't GetWonderfulFacade2", ex); return Result.Failed; }
 
                             try
-                            { sectionView = (ViewSection)GetWonderfulFacade(hostWall, assemblyInstance, $"Наружная стеновая панель {assebmlyName}. Армирование внешнего слоя", viewTemplateName3, viewportTypeName, true); facades.Add(sectionView); }
+                            { sectionView = (ViewSection)GetWonderfulFacade(hostWall, assemblyInstance, $"Наружная стеновая панель {assebmlyName}. Армирование внешнего слоя", viewTemplateName3, viewportTypeName, true); SetRebarPresentationMode(sectionView); facades.Add(sectionView); }
                             catch (Exception ex) { ShowException("Can't GetWonderfulFacade3", ex); return Result.Failed; }
 
                             try
@@ -222,7 +209,7 @@ namespace RLP
                             catch (Exception ex) { ShowException("Can't GetWonderfulFacade1", ex); return Result.Failed; }
 
                             try
-                            { sectionView = (ViewSection)GetWonderfulFacade(hostWall, assemblyInstance, $"Наружная стеновая панель {assebmlyName}. Армирование", viewTemplateName78, viewportTypeName, true); facades.Add(sectionView); }
+                            { sectionView = (ViewSection)GetWonderfulFacade(hostWall, assemblyInstance, $"Наружная стеновая панель {assebmlyName}. Армирование", viewTemplateName78, viewportTypeName, true); facades.Add(sectionView); SetRebarPresentationMode(sectionView); }
                             catch (Exception ex) { ShowException("Can't GetWonderfulFacade2", ex); return Result.Failed; }
                         }
                         else if (assebmlyName.Contains("ПСВ"))
@@ -232,505 +219,622 @@ namespace RLP
                             catch (Exception ex) { ShowException("Can't GetWonderfulFacade1", ex); return Result.Failed; }
 
                             try
-                            { sectionView = (ViewSection)GetWonderfulFacade(hostWall, assemblyInstance, $"Внутренняя стеновая панель {assebmlyName}. Армирование", viewTemplateName78, viewportTypeName, true); facades.Add(sectionView); }
+                            { sectionView = (ViewSection)GetWonderfulFacade(hostWall, assemblyInstance, $"Внутренняя стеновая панель {assebmlyName}. Армирование", viewTemplateName78, viewportTypeName, true); facades.Add(sectionView); SetRebarPresentationMode(sectionView); }
                             catch (Exception ex) { ShowException("Can't GetWonderfulFacade2", ex); return Result.Failed; }
                         }
 
                         // tx.Commit();
-                    //}
+                        //}
 
-                    ////SECTIONS 
-                    ///
+                        ////SECTIONS 
+                        ///
 
-                    //Templates
+                        //Templates
 
-                    string viewTemplateNameOpalubka = "3НСНг_Панель_Сечение_Опалубка";
-                    string viewTemplateNameArmirovanie = "3НСНг_Панель_Сечение_Армирование";
-                    string viewTemplateNameRustovka = "3НСНг_Панель_Разрез_Рустовка";
-
-
-                    string viewTemplateNameVnOpalubka = "НСН-ПСВ_Панель_Сечение_Опалубка";
-                    string viewTemplateNameVnArm = "НСН-ПСВ_Панель_Сечение_Армирование";
+                        string viewTemplateNameSectionOpalubka = "3НСНг_Панель_Сечение_Опалубка";
+                        string viewTemplateNameArmirovanie = "3НСНг_Панель_Сечение_Армирование";
+                        string viewTemplateNameRustovka = "3НСНг_Панель_Разрез_Рустовка";
 
 
-                    ///PLACES 
-                    ///
-                    List<ViewSheet> sheetsWithFacades = new List<ViewSheet>();
+                        string viewTemplateNameVnOpalubka = "НСН-ПСВ_Панель_Сечение_Опалубка";
+                        string viewTemplateNameVnArm = "НСН-ПСВ_Панель_Сечение_Армирование";
 
-                    using (Transaction tx = new Transaction(doc, "Place views on sheets"))
-                    {
-                        tx.Start();
-                        try
+
+                        ///PLACES 
+                        ///
+                        List<ViewSheet> sheetsWithFacades = new List<ViewSheet>();
+
+                        using (Transaction tx = new Transaction(doc, "Place views on sheets"))
                         {
-                            foreach (ViewSheet sheet in sheets)
+                            tx.Start();
+                            try
                             {
-                                int index = sheets.IndexOf(sheet);
-                                //if (index < facades.Count())
-                                //{
-                                ViewSection facade = facades[index];
-                                // check if facade is already on the sheet
-
-                                if (!sheet.GetAllPlacedViews().Contains(facade.Id))
+                                foreach (ViewSheet sheet in sheets)
                                 {
-                                    // Create a new viewport for the facade
-                                    BoundingBoxXYZ boundingBox = sheet.get_BoundingBox(null);
-                                    XYZ minPoint = boundingBox.Min;
-                                    XYZ maxPoint = boundingBox.Max;
-                                    Viewport viewport = Viewport.Create(sheet.Document, sheet.Id, facade.Id, XYZ.Zero);
+                                    int index = sheets.IndexOf(sheet);
+                                    //if (index < facades.Count())
+                                    //{
+                                    ViewSection facade = facades[index];
+                                    // check if facade is already on the sheet
 
-                                    //TaskDialog.Show("Size", (sheet.Outline.Max - sheet.Outline.Min).GetLength().ToString());
-
-                                    SetViewportType((View)facade, "Заголовок на листе", doc);
-
-                                    facade.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set(assebmlyName);
-
-                                    XYZ vector;
-
-                                    if ((sheet.Outline.Max - sheet.Outline.Min).GetLength() > 2)
+                                    if (!sheet.GetAllPlacedViews().Contains(facade.Id))
                                     {
-                                        vector = new XYZ((-sheet.Outline.Max.U + sheet.Outline.Min.U) * 0.7, (+sheet.Outline.Max.V - sheet.Outline.Min.V) * 0.70, 0);
+                                        // Create a new viewport for the facade
+                                        BoundingBoxXYZ boundingBox = sheet.get_BoundingBox(null);
+                                        XYZ minPoint = boundingBox.Min;
+                                        XYZ maxPoint = boundingBox.Max;
+                                        Viewport viewport = Viewport.Create(sheet.Document, sheet.Id, facade.Id, XYZ.Zero);
+
+                                        //TaskDialog.Show("Size", (sheet.Outline.Max - sheet.Outline.Min).GetLength().ToString());
+
+                                        SetViewportType((View)facade, "Заголовок на листе", doc);
+
+                                        try
+                                        {
+                                            facade.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set(assebmlyName);
+                                        }
+                                        catch { TaskDialog.Show("Номер вида существует на листе", $"На листе уже существует вид с номером {assebmlyName}"); }
+                                        XYZ vector;
+
+                                        if ((sheet.Outline.Max - sheet.Outline.Min).GetLength() > 2)
+                                        {
+                                            vector = new XYZ((-sheet.Outline.Max.U + sheet.Outline.Min.U) * 0.7, (+sheet.Outline.Max.V - sheet.Outline.Min.V) * 0.70, 0);
+                                        }
+                                        else
+                                        {
+                                            vector = new XYZ((-sheet.Outline.Max.U + sheet.Outline.Min.U) * 0.6, (+sheet.Outline.Max.V - sheet.Outline.Min.V) * 0.55, 0);
+                                        }
+
+                                        viewport.Location.Move(vector);
+                                        BoundingBoxXYZ viewportBox = viewport.get_BoundingBox(sheet);
+
+                                        // calculate the center points
+                                        XYZ vectorLabel = new XYZ((facade.Outline.Max - facade.Outline.Min).U * 0.5, (facade.Outline.Max - facade.Outline.Min).V * 1.05, 0);
+
+                                        //viewport.LabelOffset.Add(vectorLabel);
+                                        viewport.LabelOffset = vectorLabel;
+
+                                        sheetsWithFacades.Add(sheet);
                                     }
-                                    else
-                                    {
-                                        vector = new XYZ((-sheet.Outline.Max.U + sheet.Outline.Min.U) * 0.6, (+sheet.Outline.Max.V - sheet.Outline.Min.V) * 0.55, 0);
-                                    }
-
-                                    viewport.Location.Move(vector);
-                                    BoundingBoxXYZ viewportBox = viewport.get_BoundingBox(sheet);
-
-                                    // calculate the center points
-                                    XYZ vectorLabel = new XYZ((facade.Outline.Max - facade.Outline.Min).U * 0.5, (facade.Outline.Max - facade.Outline.Min).V * 1.05, 0);
-
-                                    //viewport.LabelOffset.Add(vectorLabel);
-                                    viewport.LabelOffset = vectorLabel;
-
-                                    sheetsWithFacades.Add(sheet);
+                                    //}
                                 }
-                                //}
                             }
+                            catch (Exception ex) { ShowException("Can't place views", ex); }
+                            tx.Commit();
                         }
-                        catch (Exception ex) { ShowException("Can't place views", ex); }
-                        tx.Commit();
-                    }
-                   
-                    foreach (ViewSheet sheet in sheets)
-                    {
-                        uiDoc.ActiveView = sheet;
-                    }
 
-                    using (Transaction tx = new Transaction(doc, "Place legends on sheets"))
-                    {
-                        tx.Start();
-                        try
+                        foreach (ViewSheet sheet in sheets)
                         {
-                            if (assebmlyName.Contains("3НСН"))
-                            {
-                                ViewSheet sheet = sheets[0];
-                                try
-                                {
-                                    var legend1 = new FilteredElementCollector(doc)
-                                        .OfClass(typeof(View))
-                                        .Cast<View>().Where(r => r.ViewType == ViewType.Legend)
-                                        .FirstOrDefault(l => l.Name == "Условные обозначения_3НСНг_Опалубка");
+                            uiDoc.ActiveView = sheet;
+                        }
 
-
-                                    Viewport viewportLegend1 = Viewport.Create(sheet.Document, sheet.Id, legend1.Id, XYZ.Zero);
-                                    SetViewportType(legend1, viewportTypeName, doc);
-                                    PlaceViewportOnSheet(viewportLegend1, legend1, sheet, 0.2, 0.35);
-                                }
-                                catch (Exception ex) {
-                                    TaskDialog.Show("Легенда отсутствует в проекте", 
-                                        "Легенда 'Условные обозначения_3НСНг_Опалубка' не найдена и не была размещена") ; 
-                                }
-
-                                try
-                                {
-                                    var legend2 = new FilteredElementCollector(doc)
-                                        .OfClass(typeof(View))
-                                        .Cast<View>().Where(r => r.ViewType == ViewType.Legend)
-                                        .FirstOrDefault(l => l.Name == "ТУ_3НСНг_Опалубка");
-
-
-                                    Viewport viewportLegend2 = Viewport.Create(sheet.Document, sheet.Id, legend2.Id, XYZ.Zero);
-                                    SetViewportType(legend2, viewportTypeName, doc);
-                                    PlaceViewportOnSheet(viewportLegend2, legend2, sheet, 0.2, 0.20);
-                                }
-                                catch (Exception ex)
-                                {
-                                    TaskDialog.Show("Легенда отсутствует в проекте",
-                                        "Легенда 'ТУ_3НСНг_Опалубка' не найдена и не была размещена");
-                                }
-
-                                try
-                                {
-                                    ViewSheet sheet2 = sheets[1];
-
-                                    var legend3 = new FilteredElementCollector(doc)
-                                        .OfClass(typeof(View))
-                                        .Cast<View>().Where(r => r.ViewType == ViewType.Legend)
-                                        .FirstOrDefault(l => l.Name == "ТУ_3НСНг_Армирование внутреннее");
-
-
-                                    Viewport viewportLegend3 = Viewport.Create(sheet2.Document, sheet2.Id, legend3.Id, XYZ.Zero);
-                                    SetViewportType(legend3, viewportTypeName, doc);
-                                    PlaceViewportOnSheet(viewportLegend3, legend3, sheet2, 0.2, 0.20);
-                                }
-                                catch (Exception ex)
-                                {
-                                    TaskDialog.Show("Легенда отсутствует в проекте",
-                                        "Легенда 'ТУ_3НСНг_Армирование внутреннее' не найдена и не была размещена");
-                                }
-
-                            }
-                            else
-                            {
-                                ViewSheet sheet = sheets[0];
-
-                                try
-                                {
-                                    var legend1 = new FilteredElementCollector(doc)
-                                        .OfClass(typeof(View))
-                                        .Cast<View>().Where(r => r.ViewType == ViewType.Legend)
-                                        .FirstOrDefault(l => l.Name == "Условные обозначения_НСН-ПСВ_Опалубка");
-
-                                    Viewport viewportLegend1 = Viewport.Create(sheet.Document, sheet.Id, legend1.Id, XYZ.Zero);
-                                    SetViewportType(legend1, viewportTypeName, doc);
-                                    PlaceViewportOnSheet(viewportLegend1, legend1, sheet, 0.2, 0.35);
-                                }
-                                catch (Exception ex)
-                                {
-                                    TaskDialog.Show("Легенда отсутствует в проекте",
-                                        "Легенда 'Условные обозначения_НСН-ПСВ_Опалубка' не найдена и не была размещена");
-                                }
-
-                                try
-                                {
-                                    var legend2 = new FilteredElementCollector(doc)
-                                        .OfClass(typeof(View))
-                                        .Cast<View>().Where(r => r.ViewType == ViewType.Legend)
-                                        .FirstOrDefault(l => l.Name == "ТУ_НСН-ПСВ_Опалубка");
-
-                                    Viewport viewportLegend2 = Viewport.Create(sheet.Document, sheet.Id, legend2.Id, XYZ.Zero);
-                                    SetViewportType(legend2, viewportTypeName, doc);
-                                    PlaceViewportOnSheet(viewportLegend2, legend2, sheet, 0.2, 0.20);
-                                }
-                                catch (Exception ex)
-                                {
-                                    TaskDialog.Show("Легенда отсутствует в проекте",
-                                        "Легенда 'ТУ_НСН-ПСВ_Опалубка' не найдена и не была размещена");
-                                }
-
-
-                                ViewSheet sheet2 = sheets[1];
-
-                                try
-                                {
-                                    var legend3 = new FilteredElementCollector(doc)
-                                        .OfClass(typeof(View))
-                                        .Cast<View>().Where(r => r.ViewType == ViewType.Legend)
-                                        .FirstOrDefault(l => l.Name == "Условные обозначения_НСН-ПСВ_Армирование");
-
-                                    Viewport viewportLegend3 = Viewport.Create(sheet2.Document, sheet2.Id, legend3.Id, XYZ.Zero);
-                                    SetViewportType(legend3, viewportTypeName, doc);
-                                    PlaceViewportOnSheet(viewportLegend3, legend3, sheet2, 0.2, 0.35);
-                                }
-                                catch (Exception ex)
-                                {
-                                    TaskDialog.Show("Легенда отсутствует в проекте",
-                                        "Легенда 'Условные обозначения_НСН-ПСВ_Армирование' не найдена и не была размещена");
-                                }
-
-                                try
-                                {
-                                    var legend4 = new FilteredElementCollector(doc)
-                                        .OfClass(typeof(View))
-                                        .Cast<View>().Where(r => r.ViewType == ViewType.Legend)
-                                        .FirstOrDefault(l => l.Name == "ТУ_НСН-ПСВ_Армирование");
-
-                                    Viewport viewportLegend4 = Viewport.Create(sheet2.Document, sheet2.Id, legend4.Id, XYZ.Zero);
-                                    SetViewportType(legend4, viewportTypeName, doc);
-                                    PlaceViewportOnSheet(viewportLegend4, legend4, sheet2, 0.2, 0.2);
-                                }
-                                catch (Exception ex)
-                                {
-                                    TaskDialog.Show("Легенда отсутствует в проекте",
-                                        "Легенда 'ТУ_НСН-ПСВ_Армирование' не найдена и не была размещена");
-                                }
-
-                            }
-                        } catch (Exception ex) { ShowException("Can't place legends", ex); return Result.Failed; }
-                        tx.Commit();
-                    }
-
-                    List<ElementId> sectionsToHide1 = new List<ElementId>();
-                    List<ElementId> sectionsToHide2 = new List<ElementId>();
-                    List<ElementId> sectionsToHide3 = new List<ElementId>();
-                    List<ElementId> sectionsToHide4 = new List<ElementId>();
-                    using (Transaction tx = new Transaction(doc, "Create and place section views"))
-                    {
-                        try
+                        using (Transaction tx = new Transaction(doc, "Place legends on sheets"))
                         {
-                            if (assebmlyName.Contains("3НСН"))
+                            tx.Start();
+                            try
                             {
-                                ViewSheet sheet1 = sheetsWithFacades[0];
-
-                                int viewPortNumber = 1;
-                                int horizViewPort1 = 1;
-
-                                foreach (XYZ horpoint in SectionMethods.horizontalPoints12(hostWall, doc))
+                                if (assebmlyName.Contains("3НСН"))
                                 {
+                                    ViewSheet sheet = sheets[0];
                                     try
                                     {
-                                        
+                                        var legend1 = new FilteredElementCollector(doc)
+                                            .OfClass(typeof(View))
+                                            .Cast<View>().Where(r => r.ViewType == ViewType.Legend)
+                                            .FirstOrDefault(l => l.Name == "Условные обозначения_3НСНг_Опалубка");
 
-                                        ViewSection horSectionView = SectionMethods.GetHorizontalSection(false, $"{viewPortNumber}", horpoint, hostWall,
-                                            assemblyInstance, $"О_Разрез_Опл горизонтальный {horizViewPort1}",
-                                            viewTemplateNameOpalubka, viewportTypeNameSection, doc);
+
+                                        Viewport viewportLegend1 = Viewport.Create(sheet.Document, sheet.Id, legend1.Id, XYZ.Zero);
+                                        SetViewportType(legend1, viewportTypeName, doc);
+                                        PlaceViewportOnSheet(viewportLegend1, legend1, sheet, 0.2, 0.35);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        TaskDialog.Show("Легенда отсутствует в проекте",
+                                            "Легенда 'Условные обозначения_3НСНг_Опалубка' не найдена и не была размещена");
+                                    }
+
+                                    try
+                                    {
+                                        var legend2 = new FilteredElementCollector(doc)
+                                            .OfClass(typeof(View))
+                                            .Cast<View>().Where(r => r.ViewType == ViewType.Legend)
+                                            .FirstOrDefault(l => l.Name == "ТУ_3НСНг_Опалубка");
 
 
-                                        tx.Start();
+                                        Viewport viewportLegend2 = Viewport.Create(sheet.Document, sheet.Id, legend2.Id, XYZ.Zero);
+                                        //SetViewportType(legend2, viewportTypeName, doc);
+                                        PlaceViewportOnSheet(viewportLegend2, legend2, sheet, 0.2, 0.35);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        TaskDialog.Show("Легенда отсутствует в проекте",
+                                            "Легенда 'ТУ_3НСНг_Опалубка' не найдена и не была размещена");
+                                    }
 
-                                        Viewport viewportHor = Viewport.Create(sheet1.Document, sheet1.Id, horSectionView.Id, XYZ.Zero);
-                                        SetViewportType(horSectionView, viewportTypeNameSection, doc);
-                                        PlaceViewportOnSheet(viewportHor, horSectionView, sheet1, 0.7, 0.55 - 0.13 * horizViewPort1);
-                                        viewportHor.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
-                                        
-                                        tx.Commit();
+                                    ViewSheet sheet2 = sheets[1];
+                                    try
+                                    {
+
+                                        var legend3 = new FilteredElementCollector(doc)
+                                            .OfClass(typeof(View))
+                                            .Cast<View>().Where(r => r.ViewType == ViewType.Legend)
+                                            .FirstOrDefault(l => l.Name == "Условные обозначения_3НСНг_Армирование");
+
+
+                                        Viewport viewportLegend3 = Viewport.Create(sheet2.Document, sheet2.Id, legend3.Id, XYZ.Zero);
+                                        SetViewportType(legend3, viewportTypeName, doc);
+                                        PlaceViewportOnSheet(viewportLegend3, legend3, sheet2, 0.2, 0.20);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        TaskDialog.Show("Легенда отсутствует в проекте",
+                                            "Легенда 'Условные обозначения_3НСНг_Армирование' не найдена и не была размещена");
+                                    }
+
+
+                                    try
+                                    {
+
+                                        var legend4 = new FilteredElementCollector(doc)
+                                            .OfClass(typeof(View))
+                                            .Cast<View>().Where(r => r.ViewType == ViewType.Legend)
+                                            .FirstOrDefault(l => l.Name == "ТУ_3НСНг_Армирование внутреннее");
+
+
+                                        Viewport viewportLegend4 = Viewport.Create(sheet2.Document, sheet2.Id, legend4.Id, XYZ.Zero);
+                                        //SetViewportType(legend4, viewportTypeName, doc);
+                                        PlaceViewportOnSheet(viewportLegend4, legend4, sheet2, 0.2, 0.20);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        TaskDialog.Show("Легенда отсутствует в проекте",
+                                            "Легенда 'ТУ_3НСНг_Армирование внутреннее' не найдена и не была размещена");
+                                    }
+
+
+                                }
+                                else
+                                {
+                                    ViewSheet sheet = sheets[0];
+
+                                    try
+                                    {
+                                        var legend1 = new FilteredElementCollector(doc)
+                                            .OfClass(typeof(View))
+                                            .Cast<View>().Where(r => r.ViewType == ViewType.Legend)
+                                            .FirstOrDefault(l => l.Name == "Условные обозначения_НСН-ПСВ_Опалубка");
+
+
+                                        Viewport viewportLegend1 = Viewport.Create(sheet.Document, sheet.Id, legend1.Id, XYZ.Zero);
+                                        SetViewportType(legend1, viewportTypeName, doc);
+                                        PlaceViewportOnSheet(viewportLegend1, legend1, sheet, 0.2, 0.35);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        TaskDialog.Show("Легенда отсутствует в проекте",
+                                            "Легенда 'Условные обозначения_НСН-ПСВ_Опалубка' не найдена и не была размещена");
+                                    }
+
+                                    try
+                                    {
+                                        var legend2 = new FilteredElementCollector(doc)
+                                            .OfClass(typeof(View))
+                                            .Cast<View>().Where(r => r.ViewType == ViewType.Legend)
+                                            .FirstOrDefault(l => l.Name == "ТУ_НСН-ПСВ_Опалубка");
+
+                                        Viewport viewportLegend2 = Viewport.Create(sheet.Document, sheet.Id, legend2.Id, XYZ.Zero);
+                                        //SetViewportType(legend2, viewportTypeName, doc);
+                                        PlaceViewportOnSheet(viewportLegend2, legend2, sheet, 0.2, 0.20);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        TaskDialog.Show("Легенда отсутствует в проекте",
+                                            "Легенда 'ТУ_НСН-ПСВ_Опалубка' не найдена и не была размещена");
+                                    }
+
+
+                                    ViewSheet sheet2 = sheets[1];
+
+                                    try
+                                    {
+                                        var legend3 = new FilteredElementCollector(doc)
+                                            .OfClass(typeof(View))
+                                            .Cast<View>().Where(r => r.ViewType == ViewType.Legend)
+                                            .FirstOrDefault(l => l.Name == "Условные обозначения_НСН-ПСВ_Армирование");
+
+                                        Viewport viewportLegend3 = Viewport.Create(sheet2.Document, sheet2.Id, legend3.Id, XYZ.Zero);
+                                        SetViewportType(legend3, viewportTypeName, doc);
+                                        PlaceViewportOnSheet(viewportLegend3, legend3, sheet2, 0.2, 0.35);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        TaskDialog.Show("Легенда отсутствует в проекте",
+                                            "Легенда 'Условные обозначения_НСН-ПСВ_Армирование' не найдена и не была размещена");
+                                    }
+
+                                    try
+                                    {
+                                        var legend4 = new FilteredElementCollector(doc)
+                                            .OfClass(typeof(View))
+                                            .Cast<View>().Where(r => r.ViewType == ViewType.Legend)
+                                            .FirstOrDefault(l => l.Name == "ТУ_НСН-ПСВ_Армирование");
+
+                                        Viewport viewportLegend4 = Viewport.Create(sheet2.Document, sheet2.Id, legend4.Id, XYZ.Zero);
+                                        //SetViewportType(legend4, viewportTypeName, doc);
+                                        PlaceViewportOnSheet(viewportLegend4, legend4, sheet2, 0.2, 0.2);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        TaskDialog.Show("Легенда отсутствует в проекте",
+                                            "Легенда 'ТУ_НСН-ПСВ_Армирование' не найдена и не была размещена");
+                                    }
+
+                                }
+                            }
+                            catch (Exception ex) { ShowException("Can't place legends", ex); return Result.Failed; }
+                            tx.Commit();
+                        }
+
+                        List<ElementId> sectionsToHide1 = new List<ElementId>();
+                        List<ElementId> sectionsToHide2 = new List<ElementId>();
+                        List<ElementId> sectionsToHide3 = new List<ElementId>();
+                        List<ElementId> sectionsToHide4 = new List<ElementId>();
+                        using (Transaction tx = new Transaction(doc, "Create and place section views"))
+                        {
+                            try
+                            {
+                                if (assebmlyName.Contains("3НСН"))
+                                {
+                                    ViewSheet sheet1 = sheets[0];
+
+                                    int viewPortNumber = 1;
+                                    int horizViewPort1 = 1;
+
+                                    foreach (XYZ horpoint in SectionMethods.horizontalPoints12(hostWall, doc))
+                                    {
+                                        try
+                                        {
+                                            ViewSection horSectionView = SectionMethods.GetHorizontalSection(false, $"{viewPortNumber}", horpoint, hostWall,
+                                                assemblyInstance, $"{assebmlyName}_Разрез_Опл горизонтальный {horizViewPort1}",
+                                                viewTemplateNameSectionOpalubka, viewportTypeNameSection, doc);
+
+                                            bool isViewOnSheet = SectionMethods.IsViewOnSheet(horSectionView, sheet1);
+
+                                            if (!isViewOnSheet)
+                                            {
+                                                tx.Start();
+
+                                                Viewport viewportHor = Viewport.Create(sheet1.Document, sheet1.Id, horSectionView.Id, XYZ.Zero);
+                                                SetViewportType(horSectionView, viewportTypeNameSection, doc);
+                                                PlaceViewportOnSheet(viewportHor, horSectionView, sheet1, 0.7, 0.55 - 0.13 * horizViewPort1);
+                                                try
+                                                {
+                                                    viewportHor.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
+                                                }
+                                                catch { TaskDialog.Show("Номер вида существует на листе", $"На листе уже существует вид с номером {assebmlyName}"); }
+
+                                                tx.Commit();
+                                            }
+                                            viewPortNumber++;
+                                            horizViewPort1++;
+
+                                        }
+                                        catch (Exception ex) { ShowException("Can't place horizontal views Op", ex); }//return Result.Failed; }
+                                    }
+
+                                    try
+                                    {
+                                        XYZ point = SectionMethods.horizontalPoint0(hostWall, doc);
+
+                                        ViewSection lookUpHorSection = SectionMethods.GetHorizontalSection
+                                            (true, $"{viewPortNumber}", point, hostWall,
+                                                assemblyInstance, $"{assebmlyName}_Разрез_Опл_Вид снизу",
+                                           viewTemplateNameSectionOpalubka, viewportTypeNameSection, doc);
+
+                                        bool isViewOnSheet = SectionMethods.IsViewOnSheet(lookUpHorSection, sheet1);
+
+                                        if (!isViewOnSheet)
+                                        {
+
+                                            tx.Start();
+
+                                            Viewport viewportHor = Viewport.Create(sheet1.Document, sheet1.Id, lookUpHorSection.Id, XYZ.Zero);
+                                            SetViewportType(lookUpHorSection, viewportTypeNameSection, doc);
+                                            PlaceViewportOnSheet(viewportHor, lookUpHorSection, sheet1, 0.7, 0.55 - 0.13 * horizViewPort1);
+                                            try
+                                            {
+                                                viewportHor.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
+                                            }
+                                            catch { TaskDialog.Show("Номер вида существует на листе", $"На листе уже существует вид с номером {assebmlyName}"); }
+
+                                            tx.Commit();
+                                        }
                                         viewPortNumber++;
                                         horizViewPort1++;
                                     }
                                     catch (Exception ex) { ShowException("Can't place horizontal views Op", ex); }//return Result.Failed; }
-                                }
-
-                                try
-                                {
-                                    XYZ point = SectionMethods.horizontalPoint0(hostWall, doc);
-
-                                    ViewSection lookUpHorSection = SectionMethods.GetHorizontalSection
-                                        (true, $"{viewPortNumber}", point, hostWall,
-                                            assemblyInstance, "О_Разрез_Опл_Вид снизу",
-                                       viewTemplateNameOpalubka, viewportTypeNameSection, doc);
 
 
-                                    tx.Start();
-
-                                    Viewport viewportHor = Viewport.Create(sheet1.Document, sheet1.Id, lookUpHorSection.Id, XYZ.Zero);
-                                    SetViewportType(lookUpHorSection, viewportTypeNameSection, doc);
-                                    PlaceViewportOnSheet(viewportHor, lookUpHorSection, sheet1, 0.7, 0.55 - 0.13 * horizViewPort1);
-                                    viewportHor.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
-
-                                    tx.Commit();
-                                    viewPortNumber++;
-                                    horizViewPort1++;
-                                }
-                                catch (Exception ex) { ShowException("Can't place horizontal views Op", ex); }//return Result.Failed; }
-
-
-                                int vertViewports = 1;
-                                foreach (XYZ vertPoint in SectionMethods.allVerticalPoints(hostWall, doc))
-                                {
-                                    try
+                                    int vertViewports = 1;
+                                    foreach (XYZ vertPoint in SectionMethods.allVerticalPoints(hostWall, doc))
                                     {
-                                        ViewSection vertSectionView = SectionMethods.GetVerticalSection(vertPoint, $"{viewPortNumber}", hostWall,
-                                            assemblyInstance, $"О_Разрез_Опл вертикальный {vertViewports}",
-                                        viewTemplateNameOpalubka, viewportTypeNameSection, doc);
-                                        
+                                        try
+                                        {
+                                            ViewSection vertSectionView = SectionMethods.GetVerticalSection(vertPoint, $"{viewPortNumber}", hostWall,
+                                                assemblyInstance, $"{assebmlyName}_Разрез_Опл вертикальный {vertViewports}",
+                                            viewTemplateNameSectionOpalubka, viewportTypeNameSection, doc);
 
-                                        tx.Start();
-                                        Viewport viewportVert = Viewport.Create(sheet1.Document, sheet1.Id, vertSectionView.Id, XYZ.Zero);
-                                        SetViewportType(vertSectionView, viewportTypeNameSection, doc);
-                                        PlaceViewportOnSheet(viewportVert, vertSectionView, sheet1, 0.5 - 0.1 * vertViewports, 0.7);
-                                        viewportVert.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
-                                        tx.Commit() ;
-                                        viewPortNumber++;
-                                        vertViewports++;
+                                            bool isViewOnSheet = SectionMethods.IsViewOnSheet(vertSectionView, sheet1);
+
+                                            if (!isViewOnSheet)
+                                            {
+                                                tx.Start();
+                                                Viewport viewportVert = Viewport.Create(sheet1.Document, sheet1.Id, vertSectionView.Id, XYZ.Zero);
+                                                SetViewportType(vertSectionView, viewportTypeNameSection, doc);
+                                                PlaceViewportOnSheet(viewportVert, vertSectionView, sheet1, 0.5 - 0.1 * vertViewports, 0.7);
+                                                try
+                                                {
+                                                    viewportVert.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
+                                                }
+                                                catch { TaskDialog.Show("Номер вида существует на листе", $"На листе уже существует вид с номером {assebmlyName}"); }
+
+                                                tx.Commit();
+                                            }
+                                            viewPortNumber++;
+                                            vertViewports++;
+                                        }
+                                        catch (Exception ex) { ShowException("Can't place vertical views op", ex); } //return Result.Failed; }
                                     }
-                                    catch (Exception ex) { ShowException("Can't place vertical views op", ex); } //return Result.Failed; }
-                                }
 
 
-                                ViewSheet sheet2 = sheetsWithFacades[1];
-                                int horizViewPort2 = 1;
+                                    ViewSheet sheet2 = sheets[1];
+                                    int horizViewPort2 = 1;
 
 
-                                foreach (XYZ horpoint in SectionMethods.horizontalPoints12(hostWall, doc))
-                                {
+                                    foreach (XYZ horpoint in SectionMethods.horizontalPoints12(hostWall, doc))
+                                    {
+                                        try
+                                        {
+                                            ViewSection horSectionView = SectionMethods.GetHorizontalSection(false, $"{viewPortNumber}", horpoint, hostWall,
+                                                assemblyInstance, $"{assebmlyName}_Разрез_Арм горизонтальный {horizViewPort2}",
+                                                viewTemplateNameArmirovanie, viewportTypeNameSection, doc);
+
+                                            bool isViewOnSheet = SectionMethods.IsViewOnSheet(horSectionView, sheet1);
+
+                                            if (!isViewOnSheet)
+                                            {
+                                                tx.Start();
+                                                Viewport viewportHor = Viewport.Create(sheet2.Document, sheet2.Id, horSectionView.Id, XYZ.Zero);
+                                                SetViewportType(horSectionView, viewportTypeNameSection, doc);
+                                                PlaceViewportOnSheet(viewportHor, horSectionView, sheet2, 0.7, 0.55 - 0.18 * horizViewPort2);
+                                                try
+                                                {
+                                                    viewportHor.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
+                                                }
+                                                catch { TaskDialog.Show("Номер вида существует на листе", $"На листе уже существует вид с номером {assebmlyName}"); }
+                                                tx.Commit();
+                                            }
+                                            viewPortNumber++;
+                                            horizViewPort2++;
+                                        }
+                                        catch (Exception ex) { ShowException("Can't place horizontal views Arm", ex); }// return Result.Failed; }
+                                    }
+
+                                    int vertViewports2 = 1;
+                                    foreach (XYZ vertPoint in SectionMethods.allVerticalPoints(hostWall, doc))
+                                    {
+                                        try
+                                        {
+                                            ViewSection vertSectionView = SectionMethods.GetVerticalSection(vertPoint, $"{viewPortNumber}", hostWall,
+                                                assemblyInstance, $"{assebmlyName}_Разрез_Арм вертикальный {vertViewports2}",
+                                            viewTemplateNameArmirovanie, viewportTypeNameSection, doc);
+
+                                            bool isViewOnSheet = SectionMethods.IsViewOnSheet(vertSectionView, sheet1);
+
+                                            if (!isViewOnSheet)
+                                            {
+
+                                                tx.Start();
+                                                Viewport viewportVert = Viewport.Create(sheet2.Document, sheet2.Id, vertSectionView.Id, XYZ.Zero);
+                                                SetViewportType(vertSectionView, viewportTypeNameSection, doc);
+                                                PlaceViewportOnSheet(viewportVert, vertSectionView, sheet2, 0.5 - 0.12 * vertViewports2, 0.7);
+                                                try
+                                                {
+                                                    viewportVert.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
+                                                }
+                                                catch { TaskDialog.Show("Номер вида существует на листе", $"На листе уже существует вид с номером {assebmlyName}"); }
+                                                tx.Commit();
+                                            }
+                                            viewPortNumber++;
+                                            vertViewports2++;
+                                        }
+                                        catch (Exception ex) { ShowException("Can't place vertical views Arm", ex); }// return Result.Failed; }
+                                    }
+
+                                    ViewSheet sheet4 = sheets[3];
+
+                                    XYZ horpoint4 = SectionMethods.horizontalPoints12(hostWall, doc).First();
+
                                     try
                                     {
-                                        ViewSection horSectionView = SectionMethods.GetHorizontalSection(false, $"{viewPortNumber}", horpoint, hostWall,
-                                            assemblyInstance, $"О_Разрез_Арм горизонтальный {horizViewPort2}",
-                                            viewTemplateNameArmirovanie, viewportTypeNameSection, doc);
-                                        
+                                        ViewSection horSectionView = SectionMethods.GetHorizontalSection(false, $"{viewPortNumber}", horpoint4, hostWall,
+                                            assemblyInstance, $"{assebmlyName}_Разрез_Рустовка",
+                                            viewTemplateNameRustovka, viewportTypeNameSection, doc);
 
-                                        tx.Start();
-                                        Viewport viewportHor = Viewport.Create(sheet2.Document, sheet2.Id, horSectionView.Id, XYZ.Zero);
-                                        SetViewportType(horSectionView, viewportTypeNameSection, doc);
-                                        PlaceViewportOnSheet(viewportHor, horSectionView, sheet2, 0.7, 0.55 - 0.18 * horizViewPort2);
-                                        viewportHor.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
-                                        tx.Commit() ;
+                                        bool isViewOnSheet = SectionMethods.IsViewOnSheet(horSectionView, sheet1);
+
+                                        if (!isViewOnSheet)
+                                        {
+
+                                            tx.Start();
+                                            Viewport viewportHor = Viewport.Create(sheet4.Document, sheet4.Id, horSectionView.Id, XYZ.Zero);
+                                            SetViewportType(horSectionView, viewportTypeNameSection, doc);
+                                            PlaceViewportOnSheet(viewportHor, horSectionView, sheet4, 0.7, 0.2);
+                                            try
+                                            {
+                                                viewportHor.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
+                                            }
+                                            catch { TaskDialog.Show("Номер вида существует на листе", $"На листе уже существует вид с номером {assebmlyName}"); }
+                                            tx.Commit();
+                                        }
+
                                         viewPortNumber++;
                                         horizViewPort2++;
-                                    }
-                                    catch (Exception ex) { ShowException("Can't place horizontal views Arm", ex); }// return Result.Failed; }
-                                }
-
-                                int vertViewports2 = 1;
-                                foreach (XYZ vertPoint in SectionMethods.allVerticalPoints(hostWall, doc))
-                                {
-                                    try
-                                    {
-                                        ViewSection vertSectionView = SectionMethods.GetVerticalSection(vertPoint, $"{viewPortNumber}", hostWall,
-                                            assemblyInstance, $"О_Разрез_Арм вертикальный {vertViewports2}",
-                                        viewTemplateNameArmirovanie, viewportTypeNameSection, doc);
-
-
-                                        tx.Start();
-                                        Viewport viewportVert = Viewport.Create(sheet2.Document, sheet2.Id, vertSectionView.Id, XYZ.Zero);
-                                        SetViewportType(vertSectionView, viewportTypeNameSection, doc);
-                                        PlaceViewportOnSheet(viewportVert, vertSectionView, sheet2, 0.5 - 0.12 * vertViewports2, 0.7);
-                                        viewportVert.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
-                                        tx.Commit();
-                                        viewPortNumber++;
-                                        vertViewports2++;
                                     }
                                     catch (Exception ex) { ShowException("Can't place vertical views Arm", ex); }// return Result.Failed; }
+
                                 }
-
-                                ViewSheet sheet4 = sheetsWithFacades[3];
-
-                                XYZ horpoint4 = SectionMethods.horizontalPoints12(hostWall, doc).First();
-
-                                try
+                                else if (assebmlyName.Contains("1НСН") || assebmlyName.Contains("ПСВ"))
                                 {
-                                    ViewSection horSectionView = SectionMethods.GetHorizontalSection(false, $"{viewPortNumber}", horpoint4, hostWall,
-                                        assemblyInstance, $"О_Разрез_Рустовка",
-                                        viewTemplateNameRustovka, viewportTypeNameSection, doc);
+                                    ViewSheet sheet1 = sheets[0];
 
-                                    tx.Start();
-                                    Viewport viewportHor = Viewport.Create(sheet4.Document, sheet4.Id, horSectionView.Id, XYZ.Zero);
-                                    SetViewportType(horSectionView, viewportTypeNameSection, doc);
-                                    PlaceViewportOnSheet(viewportHor, horSectionView, sheet4, 0.7, 0.2);
-                                    viewportHor.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
-                                    tx.Commit();
+                                    int viewPortNumber = 1;
+                                    int horizViewPort1 = 1;
 
-                                    viewPortNumber++;
-                                    horizViewPort2++;
-                                }
-                                catch (Exception ex) { ShowException("Can't place vertical views Arm", ex); }// return Result.Failed; }
-
-                            }
-                            else if (assebmlyName.Contains("1НСН") || assebmlyName.Contains("ПСВ"))
-                            {
-                                ViewSheet sheet1 = sheetsWithFacades[0];
-
-                                int viewPortNumber = 1;
-                                int horizViewPort1 = 1;
-
-                                foreach (XYZ horpoint in SectionMethods.horizontalPoints12(hostWall, doc))
-                                {
-                                    try
+                                    foreach (XYZ horpoint in SectionMethods.horizontalPoints12(hostWall, doc))
                                     {
-                                        ViewSection horSectionView = SectionMethods.GetHorizontalSection(false, $"{viewPortNumber}", horpoint, hostWall,
-                                            assemblyInstance, $"О_Разрез_Опл_горизонтальный {horizViewPort1}",
-                                            viewTemplateNameVnOpalubka, viewportTypeNameSection, doc);
+                                        try
+                                        {
+                                            ViewSection horSectionView = SectionMethods.GetHorizontalSection(false, $"{viewPortNumber}", horpoint, hostWall,
+                                                assemblyInstance, $"{assebmlyName}_Разрез_Опл_горизонтальный {horizViewPort1}",
+                                                viewTemplateNameVnOpalubka, viewportTypeNameSection, doc);
 
+                                            bool isViewOnSheet = SectionMethods.IsViewOnSheet(horSectionView, sheet1);
 
-                                        tx.Start();
-                                        Viewport viewportHor = Viewport.Create(sheet1.Document, sheet1.Id, horSectionView.Id, XYZ.Zero);
-                                        SetViewportType(horSectionView, viewportTypeNameSection, doc);
-                                        PlaceViewportOnSheet(viewportHor, horSectionView, sheet1, 0.7, 0.65 - 0.2 * horizViewPort1);
-                                        viewportHor.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
-                                        tx.Commit();
-                                        viewPortNumber++;
-                                        horizViewPort1++;
+                                            if (!isViewOnSheet)
+                                            {
+
+                                                tx.Start();
+                                                Viewport viewportHor = Viewport.Create(sheet1.Document, sheet1.Id, horSectionView.Id, XYZ.Zero);
+                                                SetViewportType(horSectionView, viewportTypeNameSection, doc);
+                                                PlaceViewportOnSheet(viewportHor, horSectionView, sheet1, 0.7, 0.65 - 0.2 * horizViewPort1);
+                                                try
+                                                {
+                                                    viewportHor.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
+                                                }
+                                                catch { TaskDialog.Show("Номер вида существует на листе", $"На листе уже существует вид с номером {assebmlyName}"); }
+                                                tx.Commit();
+                                            }
+                                            viewPortNumber++;
+                                            horizViewPort1++;
+                                        }
+                                        catch (Exception ex) { ShowException("Can't place horizontal views Op VN", ex); }// return Result.Failed; }
                                     }
-                                    catch (Exception ex) { ShowException("Can't place horizontal views Op VN", ex); }// return Result.Failed; }
-                                }
 
-                                XYZ leftVertPoint = SectionMethods.leftVerticalSectionPoint(hostWall, doc);
+                                    XYZ leftVertPoint = SectionMethods.leftVerticalSectionPoint(hostWall, doc);
 
-                                try
-                                {
-                                    ViewSection vertSectionView = SectionMethods.GetVerticalSection(leftVertPoint, $"{viewPortNumber}", hostWall,
-                                        assemblyInstance, $"О_Разрез_Опл вертикальный 1",
-                                    viewTemplateNameOpalubka, viewportTypeNameSection, doc);
-
-                                    tx.Start() ;
-                                    Viewport viewportVert = Viewport.Create(sheet1.Document, sheet1.Id, vertSectionView.Id, XYZ.Zero);
-                                    SetViewportType(vertSectionView, viewportTypeNameSection, doc);
-                                    PlaceViewportOnSheet(viewportVert, vertSectionView, sheet1, 0.6 - 0.1, 0.7);
-                                    viewportVert.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
-                                    tx.Commit();
-                                    viewPortNumber++;
-                                }
-                                catch (Exception ex) { ShowException("Can't place vertical views op Vn", ex); }// return Result.Failed; }
-
-                                int vertViewports = 1;
-                                ViewSheet sheet2 = sheetsWithFacades[1];
-
-                                int horizViewPort2 = 1;
-
-
-                                foreach (XYZ horpoint in SectionMethods.horizontalPoints12(hostWall, doc))
-                                {
                                     try
                                     {
-                                        ViewSection horSectionView = SectionMethods.GetHorizontalSection(false, $"{viewPortNumber}", horpoint, hostWall,
-                                            assemblyInstance, $"О_Разрез_Арм горизонтальный {horizViewPort2}",
+                                        ViewSection vertSectionView = SectionMethods.GetVerticalSection(leftVertPoint, $"{viewPortNumber}", hostWall,
+                                            assemblyInstance, $"{assebmlyName}_Разрез_Опл вертикальный 1",
+                                        viewTemplateNameVnOpalubka, viewportTypeNameSection, doc);
+
+
+                                        bool isViewOnSheet = SectionMethods.IsViewOnSheet(vertSectionView, sheet1);
+
+                                        if (!isViewOnSheet)
+                                        {
+                                            tx.Start();
+                                            Viewport viewportVert = Viewport.Create(sheet1.Document, sheet1.Id, vertSectionView.Id, XYZ.Zero);
+                                            SetViewportType(vertSectionView, viewportTypeNameSection, doc);
+                                            PlaceViewportOnSheet(viewportVert, vertSectionView, sheet1, 0.6 - 0.1, 0.7);
+                                            try
+                                            {
+                                                viewportVert.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
+                                            }
+                                            catch { TaskDialog.Show("Номер вида существует на листе", $"На листе уже существует вид с номером {assebmlyName}"); }
+                                            tx.Commit();
+                                        }
+                                        viewPortNumber++;
+                                    }
+                                    catch (Exception ex) { ShowException("Can't place vertical views op Vn", ex); }// return Result.Failed; }
+
+                                    int vertViewports = 1;
+                                    ViewSheet sheet2 = sheets[1];
+
+                                    int horizViewPort2 = 1;
+
+
+                                    foreach (XYZ horpoint in SectionMethods.horizontalPoints12(hostWall, doc))
+                                    {
+                                        try
+                                        {
+                                            ViewSection horSectionView = SectionMethods.GetHorizontalSection(false, $"{viewPortNumber}", horpoint, hostWall,
+                                                assemblyInstance, $"{assebmlyName}_Разрез_Арм горизонтальный {horizViewPort2}",
+                                                viewTemplateNameVnArm, viewportTypeNameSection, doc);
+
+                                            bool isViewOnSheet = SectionMethods.IsViewOnSheet(horSectionView, sheet1);
+
+                                            if (!isViewOnSheet)
+                                            {
+                                                tx.Start();
+                                                Viewport viewportHor = Viewport.Create(sheet2.Document, sheet2.Id, horSectionView.Id, XYZ.Zero);
+                                                SetViewportType(horSectionView, viewportTypeNameSection, doc);
+                                                PlaceViewportOnSheet(viewportHor, horSectionView, sheet2, 0.7, 0.65 - 0.2 * horizViewPort2);
+                                                try
+                                                {
+                                                    viewportHor.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
+                                                }
+                                                catch { TaskDialog.Show("Номер вида существует на листе", $"На листе уже существует вид с номером {assebmlyName}"); }
+                                                tx.Commit();
+                                            }
+                                            viewPortNumber++;
+                                            horizViewPort2++;
+                                        }
+                                        catch (Exception ex) { ShowException("Can't place horizontal views Arm Vn", ex); }// return Result.Failed; }
+                                    }
+
+
+                                    int vertViewports2 = 1;
+                                    foreach (XYZ vertPoint in SectionMethods.allVerticalPoints(hostWall, doc))
+                                    {
+                                        try
+                                        {
+                                            ViewSection vertSectionView = SectionMethods.GetVerticalSection(vertPoint, $"{viewPortNumber}", hostWall,
+                                                assemblyInstance, $"{assebmlyName}_Разрез_Арм вертикальный_{vertViewports2}",
                                             viewTemplateNameVnArm, viewportTypeNameSection, doc);
 
-                                        tx.Start();
-                                        Viewport viewportHor = Viewport.Create(sheet2.Document, sheet2.Id, horSectionView.Id, XYZ.Zero);
-                                        SetViewportType(horSectionView, viewportTypeNameSection, doc);
-                                        PlaceViewportOnSheet(viewportHor, horSectionView, sheet2, 0.7, 0.65 - 0.2 * horizViewPort2);
-                                        viewportHor.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
-                                        tx.Commit();
-                                        viewPortNumber++;
-                                        horizViewPort2++;
+
+                                            bool isViewOnSheet = SectionMethods.IsViewOnSheet(vertSectionView, sheet1);
+
+                                            if (!isViewOnSheet)
+                                            {
+                                                tx.Start();
+                                                Viewport viewportVert = Viewport.Create(sheet2.Document, sheet2.Id, vertSectionView.Id, XYZ.Zero);
+                                                SetViewportType(vertSectionView, viewportTypeNameSection, doc);
+                                                PlaceViewportOnSheet(viewportVert, vertSectionView, sheet2, 0.6 - 0.1 * vertViewports2, 0.7);
+                                                try
+                                                {
+                                                    viewportVert.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
+                                                }
+                                                catch { TaskDialog.Show("Номер вида существует на листе", $"На листе уже существует вид с номером {assebmlyName}"); }
+                                                tx.Commit();
+                                            }
+                                            viewPortNumber++;
+                                            vertViewports2++;
+                                        }
+                                        catch (Exception ex) { ShowException("Can't place vertical views Arm Vn", ex); }// return Result.Failed; }
                                     }
-                                    catch (Exception ex) { ShowException("Can't place horizontal views Arm Vn", ex); }// return Result.Failed; }
+
                                 }
-
-
-                                int vertViewports2 = 1;
-                                foreach (XYZ vertPoint in SectionMethods.allVerticalPoints(hostWall, doc))
-                                {
-                                    try
-                                    {
-                                        ViewSection vertSectionView = SectionMethods.GetVerticalSection(vertPoint, $"{viewPortNumber}", hostWall,
-                                            assemblyInstance, $"О_Разрез_Арм вертикальный {vertViewports2}",
-                                        viewTemplateNameVnArm, viewportTypeNameSection, doc);
-
-                                        tx.Start();
-                                        Viewport viewportVert = Viewport.Create(sheet2.Document, sheet2.Id, vertSectionView.Id, XYZ.Zero);
-                                        SetViewportType(vertSectionView, viewportTypeNameSection, doc);
-                                        PlaceViewportOnSheet(viewportVert, vertSectionView, sheet2, 0.6 - 0.1 * vertViewports2, 0.7);
-                                        viewportVert.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set($"{viewPortNumber}");
-                                        tx.Commit();
-                                        viewPortNumber++;
-                                        vertViewports2++;
-                                    }
-                                    catch (Exception ex) { ShowException("Can't place vertical views Arm Vn", ex); }// return Result.Failed; }
-                                }
-
                             }
+                            catch (Exception ex) { ShowException("Can't place sections", ex); }// return Result.Failed; }
+
+                            //tx.Start();
+                            //foreach (View facade in facades) { try { HideUnplacedSectionsOnView(facade); } catch { TaskDialog.Show("Hiding sections", "Could not hide a section"); } }
+                            //tx.Commit();
                         }
-                        catch (Exception ex) { ShowException("Can't place sections", ex); }// return Result.Failed; }
-
-                        //tx.Start();
-                        //foreach (View facade in facades) { try { HideUnplacedSectionsOnView(facade); } catch { TaskDialog.Show("Hiding sections", "Could not hide a section"); } }
-                        //tx.Commit();
                     }
-
-                    return Result.Succeeded;
+                    //window.Close();
+                    else
+                    {
+                        TaskDialog.Show("Некорректная сборка", $"Операция отменена для сборки {assemblyInstance.Name}");
+                    }
                 }
-
-                //window.Close();
-                TaskDialog.Show("Некорректная сборка", "Операция отменена");
-                return Result.Cancelled;
-
+                catch (Exception ex) { ShowException("BIG MISTAKE / Assembly", ex); return Result.Failed; }
             }
-            catch (Exception ex) { ShowException("BIG MISTAKE / Assembly", ex); return Result.Failed; }
+            return Result.Succeeded;
         }
         
 
@@ -927,7 +1031,11 @@ namespace RLP
             {
                 // Set the view name and viewport detail number parameters
                 view.get_Parameter(BuiltInParameter.VIEW_NAME).Set(viewName);
-                view.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set(assemblyName);
+                try
+                {
+                    view.get_Parameter(BuiltInParameter.VIEWPORT_DETAIL_NUMBER).Set(assemblyName);
+                }
+                catch { TaskDialog.Show("Номер вида существует на листе", $"На листе уже существует вид с номером {assemblyName}"); }
 
                 // Apply the view template
                 ApplyViewTemplate(view, viewTemplateName);
@@ -1573,7 +1681,33 @@ namespace RLP
 
         }
 
+        public void SetRebarPresentationMode(View view)
+        {
+            Document doc = view.Document;
 
+            // Start a new transaction
+            using (Transaction trans = new Transaction(doc, "Set Rebar Presentation Mode"))
+            {
+                trans.Start();
+
+                // Get all the rebars in the view
+                FilteredElementCollector rebarCollector = new FilteredElementCollector(doc, view.Id)
+                    .OfClass(typeof(Rebar));
+
+                foreach (Rebar rebar in rebarCollector)
+                {
+                    try
+                    {
+                        // Set the rebar presentation mode to "Middle"
+                        rebar.SetPresentationMode(view, RebarPresentationMode.Middle);
+                    }
+                    catch { }
+                }
+
+                // Commit the transaction
+                trans.Commit();
+            }
+        }
 
 
         private ViewSection CreateHorizontalSectionView(Wall wall, XYZ originPoint, bool upDown)

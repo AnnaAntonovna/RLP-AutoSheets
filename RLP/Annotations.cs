@@ -53,12 +53,56 @@ namespace RLP
 
             IList<ElementId> commonElements = collector.Intersect(subElementIds).ToList();
 
+            FilteredElementCollector namecollector = new FilteredElementCollector(doc);
+            List<FamilyInstance> familyInstances1 = collector
+                .OfType<FamilyInstance>()
+                .Cast<FamilyInstance>()
+                .Where(fi => fi.Symbol.Name.Contains("RLP_Каркас"))
+                .ToList();
+            List<FamilyInstance> familyInstances2 = collector
+                .OfType<FamilyInstance>()
+                .Cast<FamilyInstance>()
+                .Where(fi => fi.Symbol.Name.Contains("IFC_МН"))
+                .ToList();
+
+            List<FamilyInstance> familyInstancesCommon = familyInstances1.Concat(familyInstances2).ToList();
+
+            List<ElementId> supercomps = new List<ElementId>(); 
+
+            foreach (FamilyInstance f in familyInstancesCommon)
+            {
+                if (f.SuperComponent != null)
+                {
+                    supercomps.Concat(f.GetSubComponentIds());
+                }
+            }
+
+            IList<ElementId> commonElements2 = commonElements.Except(supercomps).ToList();
+
+            IList <ElementId> windows = (IList<ElementId>)new FilteredElementCollector(view.Document, view.Id)
+                .OfCategory(BuiltInCategory.OST_Windows)
+                .ToElementIds();
+            IList<ElementId> doors = (IList<ElementId>)new FilteredElementCollector(view.Document, view.Id)
+                .OfCategory(BuiltInCategory.OST_Doors)
+                .ToElementIds();
+            IList<ElementId> walls = (IList<ElementId>)new FilteredElementCollector(view.Document, view.Id)
+                .OfCategory(BuiltInCategory.OST_Walls)
+                .ToElementIds();
+            IList<ElementId> parts = (IList<ElementId>)new FilteredElementCollector(view.Document, view.Id)
+                .OfCategory(BuiltInCategory.OST_Parts)
+                .ToElementIds();
+
+            IList<ElementId> notWindows = commonElements2.Except(windows).ToList();
+            IList<ElementId> notParts = notWindows.Except(parts).ToList();
+            IList<ElementId> notwalls = notParts.Except(walls).ToList();
+            IList<ElementId> finalElements = notParts.Except(doors).ToList();
+
             using (Transaction tx = new Transaction(doc, "SetTags"))
             {
                 tx.Start();
 
                 // Loop through the elements and tag each one on its center
-                foreach (ElementId elementId in commonElements)
+                foreach (ElementId elementId in finalElements)
                 {
                     Element element = doc.GetElement(elementId);
                     try

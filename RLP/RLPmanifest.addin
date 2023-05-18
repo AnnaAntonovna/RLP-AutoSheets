@@ -3,7 +3,7 @@
 	<AddIn Type="Application">
 		<Name>RLP</Name>
 		<Assembly>C:\Program Files (x86)\RLP plugin\rlp.dll</Assembly>
-		<AddInId>780e9491-8b5a-4c48-88dc-954b4dc0ad1e</AddInId>
+		<AddInId>780e9491-8b5a-4c48-88dc-95434dc0ad1e</AddInId>
 		<FullClassName>RLP.TabPanel</FullClassName>
 		<VendorId>Anna Baranova</VendorId>
 		<VendorDescription>Вы поймали ошибку, которую мы еще не видели! Пожалуйста, поделитесь этим прекрасным открытием с нами! Сообщите о проблеме разработчику и опишите ее по адресу - an2baranova@gmail.com. А пока вы ждете ответа, убедитесь, что действовали по инструкции. Приятного пользования!</VendorDescription>
