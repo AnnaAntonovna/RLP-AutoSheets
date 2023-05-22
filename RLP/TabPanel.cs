@@ -41,11 +41,12 @@ namespace RLP
             string assebmlyDir = new FileInfo(assembly.Location).DirectoryName;
             path = System.IO.Path.GetDirectoryName(assemPath);
 
-            //Create buttons
+            //Create buttonsCreateButton
 
             CreateButton("Виды и листы", 1, $"RLP.Combine", panel1, "Выберите сборку и кнопка создаст листы и фасады к ней");
             CreateButton("Проставление\nмарок", 2, $"RLP.Annotations", panel1, "Проставит марки для элементов сборки на активном виде (в прогрессе)");
             CreateButton("Изменить марки\nпо умолчанию", 3, $"RLP.LoadedTagsAndSymbols", panel1, "Загруженные в проект марки");
+            CreateButton("Создать\nспецификации", 4, $"RLP.ScheduleCMD", panel1, "Загруженные в проект марки");
             //CreateButton("Тест", 3, $"RLP.CreateAssemblySection", panel1, "Wow - a tooltip!");
 
             return Result.Succeeded;

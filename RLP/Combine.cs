@@ -189,8 +189,7 @@ namespace RLP
                             catch (Exception ex) { ShowException("Can't GetWonderfulFacade1", ex); return Result.Failed; }
 
                             try
-                            { sectionView = (ViewSection)GetWonderfulFacade(hostWall, assemblyInstance, $"Наружная стеновая панель {assebmlyName}. Армирование внутреннего слоя", viewTemplateName2, viewportTypeName, true); SetRebarPresentationMode(sectionView); facades.Add(sectionView);
-                                SetRebarPresentationMode(sectionView);}
+                            { sectionView = (ViewSection)GetWonderfulFacade(hostWall, assemblyInstance, $"Наружная стеновая панель {assebmlyName}. Армирование внутреннего слоя", viewTemplateName2, viewportTypeName, true); SetRebarPresentationMode(sectionView); CreateDetailLineForElement(sectionView); facades.Add(sectionView); }
                             catch (Exception ex) { ShowException("Can't GetWonderfulFacade2", ex); return Result.Failed; }
 
                             try
@@ -209,7 +208,7 @@ namespace RLP
                             catch (Exception ex) { ShowException("Can't GetWonderfulFacade1", ex); return Result.Failed; }
 
                             try
-                            { sectionView = (ViewSection)GetWonderfulFacade(hostWall, assemblyInstance, $"Наружная стеновая панель {assebmlyName}. Армирование", viewTemplateName78, viewportTypeName, true); facades.Add(sectionView); SetRebarPresentationMode(sectionView); }
+                            { sectionView = (ViewSection)GetWonderfulFacade(hostWall, assemblyInstance, $"Наружная стеновая панель {assebmlyName}. Армирование", viewTemplateName78, viewportTypeName, true); facades.Add(sectionView); SetRebarPresentationMode(sectionView); CreateDetailLineForElement(sectionView); }
                             catch (Exception ex) { ShowException("Can't GetWonderfulFacade2", ex); return Result.Failed; }
                         }
                         else if (assebmlyName.Contains("ПСВ"))
@@ -219,7 +218,7 @@ namespace RLP
                             catch (Exception ex) { ShowException("Can't GetWonderfulFacade1", ex); return Result.Failed; }
 
                             try
-                            { sectionView = (ViewSection)GetWonderfulFacade(hostWall, assemblyInstance, $"Внутренняя стеновая панель {assebmlyName}. Армирование", viewTemplateName78, viewportTypeName, true); facades.Add(sectionView); SetRebarPresentationMode(sectionView); }
+                            { sectionView = (ViewSection)GetWonderfulFacade(hostWall, assemblyInstance, $"Внутренняя стеновая панель {assebmlyName}. Армирование", viewTemplateName78, viewportTypeName, true); facades.Add(sectionView); SetRebarPresentationMode(sectionView); CreateDetailLineForElement(sectionView);  }
                             catch (Exception ex) { ShowException("Can't GetWonderfulFacade2", ex); return Result.Failed; }
                         }
 
@@ -1708,6 +1707,107 @@ namespace RLP
                 trans.Commit();
             }
         }
+
+        public void CreateDetailLineForElement(View view)
+        {
+            try
+            {
+                Document doc = view.Document;
+
+                // Get all the family instances with name starting with "RLP_Каркас"
+                List<Element> collector = new FilteredElementCollector(doc, view.Id)
+                    .WhereElementIsNotElementType().ToElements()
+                    .Where(e => e.get_Parameter(BuiltInParameter.ELEM_FAMILY_PARAM).AsValueString().Contains("RLP_Каркас")).ToList();
+
+
+                // Get the third element
+                Element targetElement = collector.Skip(1).FirstOrDefault();
+                if (targetElement == null)
+                {
+                    TaskDialog.Show("Error", "No valid element found.");
+                    return;
+                }
+
+                // Get the parameters for calculating line length
+                double lengthParameter = 0.0;
+                double protrusionParameter = 0.0;
+                bool hasLengthParameter = targetElement.LookupParameter("ADSK_Длина арматуры").HasValue;
+                bool hasProtrusionParameter = targetElement.LookupParameter("RLP_Выступ П_стержня").HasValue;
+
+                if (hasLengthParameter)
+                {
+                    Parameter lengthParam = targetElement.LookupParameter("ADSK_Длина арматуры");
+                    lengthParameter = lengthParam.AsDouble();
+                }
+
+                if (hasProtrusionParameter)
+                {
+                    Parameter protrusionParam = targetElement.LookupParameter("RLP_Выступ П_стержня");
+                    protrusionParameter = protrusionParam.AsDouble();
+                }
+
+                double lineLength = lengthParameter + protrusionParameter;
+
+
+                // Create the detail line
+                using (Transaction trans = new Transaction(doc, "Create Detail Line"))
+                {
+                    trans.Start();
+
+                    // Create a bounding box around the element
+                    BoundingBoxXYZ boundingBox = targetElement.get_BoundingBox(view);
+                    XYZ minPoint = boundingBox.Min;
+                    XYZ maxPoint = boundingBox.Max;
+                    XYZ centerBoundingBox = 0.5 * (minPoint + maxPoint);
+
+                    TaskDialog.Show("coord", centerBoundingBox.ToString());
+
+                    // Calculate the line start and end points
+                    XYZ lineStart = new XYZ(centerBoundingBox.X, centerBoundingBox.Y, centerBoundingBox.Z - lineLength / 2);
+                    XYZ lineEnd = new XYZ(centerBoundingBox.X, centerBoundingBox.Y, centerBoundingBox.Z + lineLength / 2);
+                    try
+                    {
+                        // Create the detail line
+                        DetailLine detailLine = doc.Create.NewDetailCurve(view, Line.CreateBound(lineStart, lineEnd)) as DetailLine;
+
+                        // Set the line style
+                        ElementId lineStyleId = GetLineSymbolIdByName(doc, "ADSK_Сплошная_Черная_4");
+                        detailLine.LineStyle = doc.GetElement(lineStyleId);
+                    }
+                    catch (Exception ex) { ShowException("Can't CreateDetailLineForElement", ex); }
+
+                    // Commit the transaction
+                    trans.Commit();
+                }
+            }
+            catch (Exception ex) { ShowException("Can't CreateDetailLineForElement", ex); }
+        }
+
+        public XYZ GetCenterPoint(Element element)
+        {
+            BoundingBoxXYZ boundingBox = element.get_BoundingBox(null);
+            XYZ minPoint = boundingBox.Min;
+            XYZ maxPoint = boundingBox.Max;
+            XYZ centerPoint = 0.5 * (minPoint + maxPoint);
+
+            return centerPoint;
+        }
+
+        public ElementId GetLineSymbolIdByName(Document doc, string lineStyleName)
+        {
+            List<Element> collector = new FilteredElementCollector(doc)
+                .OfClass(typeof(GraphicsStyle))
+                .Where(x => x.Name == lineStyleName).ToList();
+
+            GraphicsStyle linePatternElement = collector.FirstOrDefault() as GraphicsStyle;
+            if (linePatternElement != null)
+            {
+                return linePatternElement.Id;
+            }
+
+            return ElementId.InvalidElementId;
+        }
+
 
 
         private ViewSection CreateHorizontalSectionView(Wall wall, XYZ originPoint, bool upDown)
