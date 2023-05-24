@@ -1739,12 +1739,14 @@ namespace RLP
                     Parameter lengthParam = targetElement.LookupParameter("ADSK_Длина арматуры");
                     lengthParameter = lengthParam.AsDouble();
                 }
+                else { lengthParameter = 0; }
 
                 if (hasProtrusionParameter)
                 {
                     Parameter protrusionParam = targetElement.LookupParameter("RLP_Выступ П_стержня");
                     protrusionParameter = protrusionParam.AsDouble();
                 }
+                else { protrusionParameter = 0; }
 
                 double lineLength = lengthParameter + protrusionParameter;
 

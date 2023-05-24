@@ -428,6 +428,7 @@ namespace RLP
                 // Set the viewport type
 
                 SetViewportType(view, viewportTypeName, doc);
+
             }
             catch (Exception ex)
             {

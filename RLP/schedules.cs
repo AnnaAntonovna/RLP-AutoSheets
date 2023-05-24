@@ -103,20 +103,22 @@ namespace RLP
                         {
                             double height = 0;
                             ViewSchedule schedule1 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                "Спецификация к панелям № 1.1_Каркасы_3НСНг, 1НСН, 1НС", "Спец № 1_Каркасы123", categoryId); 
+                                "Спецификация к панелям № 1.1_Каркасы_3НСНг, 1НСН, 1НС", "Спец № 1_Каркасы", categoryId); SetParameterValue(schedule1, "ADSK_Группирование", $"{assebmlyName}");
                             ViewSchedule schedule2 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                "Спецификация к панелям № 2_Сетки", "Спец № 2_Сетки123", categoryId);
+                                "Спецификация к панелям № 2_Сетки", "Спец № 2_Сетки", categoryId); SetParameterValue(schedule2, "ADSK_Группирование", $"{assebmlyName}");
                             ViewSchedule schedule3 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                "Спецификация к панелям № 3_Закладные детали", "Спец № 3_Закладные123", categoryId);
+                                "Спецификация к панелям № 3_Закладные детали", "Спец № 3_Закладные", categoryId); SetParameterValue(schedule3, "ADSK_Группирование", $"{assebmlyName}");
                             ViewSchedule schedule4 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                "Спецификация к панелям № 4_Стержни и гнутые детали", "Спец № 4_Арматура123", categoryId);
+                                "Спецификация к панелям № 4_Стержни и гнутые детали", "Спец № 4_Арматура", categoryId); SetParameterValue(schedule4, "ADSK_Группирование", $"{assebmlyName}");
                             ViewSchedule schedule5 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                "Спецификация к панелям № 5_Стандартные изделия", "Спец № 5_Стандартные изделия123", categoryId);
+                                "Спецификация к панелям № 5_Стандартные изделия", "Спец № 5_Стандартные изделия", categoryId); SetParameterValue(schedule5, "ADSK_Группирование", $"{assebmlyName}");
+                            ViewSchedule schedule6 = CreateScheduleFromTemplate(doc, assemblyInstance, "Спецификация к панелям № 6_Материалы",
+                                "Спец № 6_Материалы"); SetParameterValue(schedule1, "ADSK_Группирование", $"{assebmlyName}"); SetParameterValue(schedule6, "ADSK_Группирование", $"{assebmlyName}");
 
                             ViewSchedule schedule7 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                    "3НСНг_Ведомость расхода стали на изделия арматурные", "ВРС_Арматура123", categoryId);
+                                    "3НСНг_Ведомость расхода стали на изделия арматурные", "ВРС_Арматура", categoryId); SetParameterValue(schedule7, "ADSK_Группирование", $"{assebmlyName}");
                             ViewSchedule schedule8 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                    "3НСНг_Ведомость расхода стали на изделия закладные", "ВРС_Закладные123", categoryId);
+                                    "3НСНг_Ведомость расхода стали на изделия закладные", "ВРС_Закладные", categoryId); SetParameterValue(schedule8, "ADSK_Группирование", $"{assebmlyName}");
 
 
                             ViewSheet sheet = CreateSheetWithAssembly(doc, assemblyInstance, $"Наружная стеновая панель {assebmlyName}. Спецификации"
@@ -132,43 +134,63 @@ namespace RLP
                                     // Create the viewport on the sheet
                                     try
                                     {
-                                        Viewport viewport1 = Viewport.Create(sheet.Document, sheet.Id, schedule1.Id, XYZ.Zero);
-                                        height = height + GetViewportHeight(sheet, viewport1);
-                                        ChangeViewportPlaceOnSheet(viewport1, schedule1, sheet, 0.2, 0.9 - height);
+                                        ScheduleSheetInstance viewport1 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule1.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport1, schedule1, sheet, 0.242, 0.88 -  GetViewportHeight(sheet, viewport1)/2);
+                                        height = height + GetViewportHeight(sheet, viewport1)/2;
                                     }
-                                    catch (Exception ex) { ShowException("Could not place schedules on a sheet", ex); }
+                                    catch (Exception ex) { ShowException("Could not place schedule1 on a sheet", ex); }
 
                                     try
                                     {
-                                        Viewport viewport2 = Viewport.Create(sheet.Document, sheet.Id, schedule2.Id, XYZ.Zero);
-                                    height = height + GetViewportHeight(sheet, viewport2);
-                                    ChangeViewportPlaceOnSheet(viewport2, schedule2, sheet, 0.2, 0.9 - height);
+                                        ScheduleSheetInstance viewport2 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule2.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport2, schedule2, sheet, 0.242, 0.88 - height - GetViewportHeight(sheet, viewport2) / 2);
+                                        height = height + GetViewportHeight(sheet, viewport2)/2;
                                     }
-                                    catch (Exception ex) { ShowException("Could not place schedules on a sheet", ex); }
+                                    catch (Exception ex) { ShowException("Could not place schedule2 on a sheet", ex); }
 
                                     try
                                     {
-                                        Viewport viewport3 = Viewport.Create(sheet.Document, sheet.Id, schedule3.Id, XYZ.Zero);
-                                    height = height + GetViewportHeight(sheet, viewport3);
-                                    ChangeViewportPlaceOnSheet(viewport3, schedule3, sheet, 0.2, 0.9 - height);
+                                        ScheduleSheetInstance viewport3 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule3.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport3, schedule3, sheet, 0.242, 0.88 - height -  GetViewportHeight(sheet, viewport3) / 2);
+                                        height = height + GetViewportHeight(sheet, viewport3)/2;
                                     }
-                                    catch (Exception ex) { ShowException("Could not place schedules on a sheet", ex); }
+                                    catch (Exception ex) { ShowException("Could not place schedule3 on a sheet", ex); }
 
                                     try
                                     {
-                                        Viewport viewport4 = Viewport.Create(sheet.Document, sheet.Id, schedule4.Id, XYZ.Zero);
-                                    height = height + GetViewportHeight(sheet, viewport4);
-                                    ChangeViewportPlaceOnSheet(viewport4, schedule4, sheet, 0.2, 0.9 - height);
+                                        ScheduleSheetInstance viewport4 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule4.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport4, schedule4, sheet, 0.242, 0.88 - height - GetViewportHeight(sheet, viewport4) / 2);
+                                        height = height + GetViewportHeight(sheet, viewport4)/2;
                                     }
-                                    catch (Exception ex) { ShowException("Could not place schedules on a sheet", ex); }
+                                    catch (Exception ex) { ShowException("Could not place schedule4 on a sheet", ex); }
 
                                     try
                                     {
-                                        Viewport viewport5 = Viewport.Create(sheet.Document, sheet.Id, schedule5.Id, XYZ.Zero);
-                                    height = height + GetViewportHeight(sheet, viewport5);
-                                    ChangeViewportPlaceOnSheet(viewport5, schedule5, sheet, 0.2, 0.9 - height);
+                                        ScheduleSheetInstance viewport5 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule5.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport5, schedule5, sheet, 0.242, 0.87 - height - GetViewportHeight(sheet, viewport5) / 2);
+                                        height = height + GetViewportHeight(sheet, viewport5)/2;
                                     }
-                                    catch (Exception ex) { ShowException("Could not place schedules on a sheet", ex); }
+                                    catch (Exception ex) { ShowException("Could not place schedules5 on a sheet", ex); }
+                                    try
+                                    {
+                                        ScheduleSheetInstance viewport6 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule6.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport6, schedule6, sheet, 0.242, 0.87 - height - GetViewportHeight(sheet, viewport6)*2);
+                                    }
+                                    catch (Exception ex) { ShowException("Could not place schedules5 on a sheet", ex); }
+
+                                    try
+                                    {
+                                        ScheduleSheetInstance viewport7 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule6.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport7, schedule7, sheet, 0.7, 0.70);
+                                    }
+                                    catch (Exception ex) { ShowException("Could not place schedules5 on a sheet", ex); }
+                                    try
+                                    {
+                                        ScheduleSheetInstance viewport8 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule6.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport8, schedule8, sheet, 0.7, 0.70 - GetViewportHeight(sheet, viewport8));
+                                    }
+                                    catch (Exception ex) { ShowException("Could not place schedules5 on a sheet", ex); }
+
 
                                     transaction.Commit();
                                 }
@@ -181,46 +203,205 @@ namespace RLP
                         else if (assebmlyName.Contains("1НСН"))
                         {
                             ViewSchedule schedule1 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                "Спецификация к панелям № 1.1_Каркасы_3НСНг, 1НСН, 1НС", "Спец № 1_Каркасы", categoryId);
+                                "Спецификация к панелям № 1.1_Каркасы_3НСНг, 1НСН, 1НС", "Спец № 1_Каркасы", categoryId); SetParameterValue(schedule1, "ADSK_Группирование", $"{assebmlyName}");
                             ViewSchedule schedule2 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                "Спецификация к панелям № 2_Сетки", "Спец № 2_Сетки", categoryId);
+                                "Спецификация к панелям № 2_Сетки", "Спец № 2_Сетки", categoryId); SetParameterValue(schedule2, "ADSK_Группирование", $"{assebmlyName}");
                             ViewSchedule schedule3 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                "Спецификация к панелям № 3_Закладные детали", "Спец № 3_Закладные", categoryId);
+                                "Спецификация к панелям № 3_Закладные детали", "Спец № 3_Закладные", categoryId); SetParameterValue(schedule3, "ADSK_Группирование", $"{assebmlyName}");
                             ViewSchedule schedule4 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                "Спецификация к панелям № 4_Стержни и гнутые детали", "Спец № 4_Арматура", categoryId);
+                                "Спецификация к панелям № 4_Стержни и гнутые детали", "Спец № 4_Арматура", categoryId); SetParameterValue(schedule4, "ADSK_Группирование", $"{assebmlyName}");
                             ViewSchedule schedule5 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                "Спецификация к панелям № 5_Стандартные изделия", "Спец № 5_Стандартные изделия", categoryId);
+                                "Спецификация к панелям № 5_Стандартные изделия", "Спец № 5_Стандартные изделия", categoryId); SetParameterValue(schedule5, "ADSK_Группирование", $"{assebmlyName}");
+                            ViewSchedule schedule6 = CreateScheduleFromTemplate(doc, assemblyInstance, "Спецификация к панелям № 6_Материалы",
+                                "Спец № 6_Материалы"); SetParameterValue(schedule1, "ADSK_Группирование", $"{assebmlyName}"); SetParameterValue(schedule6, "ADSK_Группирование", $"{assebmlyName}");
 
                             ViewSchedule schedule7 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                    "НСН-ПСВ_Ведомость расхода стали на изделия арматурные", "ВРС_Арматура", categoryId);
+                                    "НСН-ПСВ_Ведомость расхода стали на изделия арматурные", "ВРС_Арматура", categoryId); SetParameterValue(schedule7, "ADSK_Группирование", $"{assebmlyName}");
                             ViewSchedule schedule8 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                    "НСН-ПСВ_Ведомость расхода стали на изделия закладные", "ВРС_Закладные", categoryId);
+                                    "НСН-ПСВ_Ведомость расхода стали на изделия закладные", "ВРС_Закладные", categoryId); SetParameterValue(schedule8, "ADSK_Группирование", $"{assebmlyName}");
 
 
                             ViewSheet sheet = CreateSheetWithAssembly(doc, assemblyInstance, $"Наружная стеновая панель {assebmlyName}. Спецификации"
                                 , 2, "3", "Форма 6");
+
+                            PlaceScheduleOnSheet(sheet);
+
+                            double height = 0;
+
+                            using (Transaction transaction = new Transaction(doc, "Place schedules on a sheet"))
+                            {
+                                try
+                                {
+                                    transaction.Start();
+                                    // Create the viewport on the sheet
+                                    try
+                                    {
+                                        ScheduleSheetInstance viewport1 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule1.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport1, schedule1, sheet, 0.242, 0.88 - GetViewportHeight(sheet, viewport1) / 2);
+                                        height = height + GetViewportHeight(sheet, viewport1) / 2;
+                                    }
+                                    catch (Exception ex) { ShowException("Could not place schedule1 on a sheet", ex); }
+
+                                    try
+                                    {
+                                        ScheduleSheetInstance viewport2 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule2.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport2, schedule2, sheet, 0.242, 0.88 - height - GetViewportHeight(sheet, viewport2) / 2);
+                                        height = height + GetViewportHeight(sheet, viewport2) / 2;
+                                    }
+                                    catch (Exception ex) { ShowException("Could not place schedule2 on a sheet", ex); }
+
+                                    try
+                                    {
+                                        ScheduleSheetInstance viewport3 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule3.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport3, schedule3, sheet, 0.242, 0.88 - height - GetViewportHeight(sheet, viewport3) / 2);
+                                        height = height + GetViewportHeight(sheet, viewport3) / 2;
+                                    }
+                                    catch (Exception ex) { ShowException("Could not place schedule3 on a sheet", ex); }
+
+                                    try
+                                    {
+                                        ScheduleSheetInstance viewport4 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule4.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport4, schedule4, sheet, 0.242, 0.88 - height - GetViewportHeight(sheet, viewport4) / 2);
+                                        height = height + GetViewportHeight(sheet, viewport4) / 2;
+                                    }
+                                    catch (Exception ex) { ShowException("Could not place schedule4 on a sheet", ex); }
+
+                                    try
+                                    {
+                                        ScheduleSheetInstance viewport5 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule5.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport5, schedule5, sheet, 0.242, 0.87 - height - GetViewportHeight(sheet, viewport5) / 2);
+                                        height = height + GetViewportHeight(sheet, viewport5) / 2;
+                                    }
+                                    catch (Exception ex) { ShowException("Could not place schedules5 on a sheet", ex); }
+                                    try
+                                    {
+                                        ScheduleSheetInstance viewport6 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule6.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport6, schedule6, sheet, 0.242, 0.87 - height - GetViewportHeight(sheet, viewport6) * 2);
+                                    }
+                                    catch (Exception ex) { ShowException("Could not place schedules5 on a sheet", ex); }
+
+                                    try
+                                    {
+                                        ScheduleSheetInstance viewport7 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule6.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport7, schedule7, sheet, 0.7, 0.70);
+                                    }
+                                    catch (Exception ex) { ShowException("Could not place schedules5 on a sheet", ex); }
+                                    try
+                                    {
+                                        ScheduleSheetInstance viewport8 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule6.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport8, schedule8, sheet, 0.7, 0.70 - GetViewportHeight(sheet, viewport8));
+                                    }
+                                    catch (Exception ex) { ShowException("Could not place schedules5 on a sheet", ex); }
+
+
+                                    transaction.Commit();
+                                }
+                                catch (Exception ex) { ShowException("Could not place schedules on a sheet", ex); }
+                                // Change the placement of the viewport on the sheet
+                            }
+
                             uiDoc.ActiveView = sheet;
                         }
                         else if (assebmlyName.Contains("ПСВ"))
                         {
                             ViewSchedule schedule1 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                    "Спецификация к панелям № 1.2_Каркасы_ПСВ", "Спец № 1_Каркасы", categoryId);
+                                    "Спецификация к панелям № 1.2_Каркасы_ПСВ", "Спец № 1_Каркасы", categoryId); SetParameterValue(schedule1, "ADSK_Группирование", $"{assebmlyName}");
                             ViewSchedule schedule2 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                "Спецификация к панелям № 2_Сетки", "Спец № 2_Сетки", categoryId);
+                                "Спецификация к панелям № 2_Сетки", "Спец № 2_Сетки", categoryId); SetParameterValue(schedule2, "ADSK_Группирование", $"{assebmlyName}");
                             ViewSchedule schedule3 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                "Спецификация к панелям № 3_Закладные детали", "Спец № 3_Закладные", categoryId);
+                                "Спецификация к панелям № 3_Закладные детали", "Спец № 3_Закладные", categoryId); SetParameterValue(schedule3, "ADSK_Группирование", $"{assebmlyName}");
                             ViewSchedule schedule4 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                "Спецификация к панелям № 4_Стержни и гнутые детали", "Спец № 4_Арматура", categoryId);
+                                "Спецификация к панелям № 4_Стержни и гнутые детали", "Спец № 4_Арматура", categoryId); SetParameterValue(schedule4, "ADSK_Группирование", $"{assebmlyName}");
                             ViewSchedule schedule5 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                "Спецификация к панелям № 5_Стандартные изделия", "Спец № 5_Стандартные изделия", categoryId);
+                                "Спецификация к панелям № 5_Стандартные изделия", "Спец № 5_Стандартные изделия", categoryId); SetParameterValue(schedule5, "ADSK_Группирование", $"{assebmlyName}");
+                            ViewSchedule schedule6 = CreateScheduleFromTemplate(doc, assemblyInstance, "Спецификация к панелям № 6_Материалы",
+                                "Спец № 6_Материалы"); SetParameterValue(schedule1, "ADSK_Группирование", $"{assebmlyName}"); SetParameterValue(schedule6, "ADSK_Группирование", $"{assebmlyName}");
+
 
                             ViewSchedule schedule7 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                    "НСН-ПСВ_Ведомость расхода стали на изделия арматурные", "ВРС_Арматура", categoryId);
+                                    "НСН-ПСВ_Ведомость расхода стали на изделия арматурные", "ВРС_Арматура", categoryId); SetParameterValue(schedule7, "ADSK_Группирование", $"{assebmlyName}");
                             ViewSchedule schedule8 = CreateScheduleFromTemplate(doc, assemblyInstance,
-                                    "НСН-ПСВ_Ведомость расхода стали на изделия закладные", "ВРС_Закладные", categoryId);
+                                    "НСН-ПСВ_Ведомость расхода стали на изделия закладные", "ВРС_Закладные", categoryId); SetParameterValue(schedule7, "ADSK_Группирование", $"{assebmlyName}");
 
                             ViewSheet sheet = CreateSheetWithAssembly(doc, assemblyInstance, $"Внутренняя стеновая панель {assebmlyName}. Спецификации"
                                 , 2, "3", "Форма 6");
+
+                            PlaceScheduleOnSheet(sheet);
+
+                            double height = 0;
+
+                            using (Transaction transaction = new Transaction(doc, "Place schedules on a sheet"))
+                            {
+                                try
+                                {
+                                    transaction.Start();
+                                    // Create the viewport on the sheet
+                                    try
+                                    {
+                                        ScheduleSheetInstance viewport1 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule1.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport1, schedule1, sheet, 0.242, 0.88 - GetViewportHeight(sheet, viewport1) / 2);
+                                        height = height + GetViewportHeight(sheet, viewport1) / 2;
+                                    }
+                                    catch (Exception ex) { ShowException("Could not place schedule1 on a sheet", ex); }
+
+                                    try
+                                    {
+                                        ScheduleSheetInstance viewport2 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule2.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport2, schedule2, sheet, 0.242, 0.88 - height - GetViewportHeight(sheet, viewport2) / 2);
+                                        height = height + GetViewportHeight(sheet, viewport2) / 2;
+                                    }
+                                    catch (Exception ex) { ShowException("Could not place schedule2 on a sheet", ex); }
+
+                                    try
+                                    {
+                                        ScheduleSheetInstance viewport3 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule3.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport3, schedule3, sheet, 0.242, 0.88 - height - GetViewportHeight(sheet, viewport3) / 2);
+                                        height = height + GetViewportHeight(sheet, viewport3) / 2;
+                                    }
+                                    catch (Exception ex) { ShowException("Could not place schedule3 on a sheet", ex); }
+
+                                    try
+                                    {
+                                        ScheduleSheetInstance viewport4 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule4.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport4, schedule4, sheet, 0.242, 0.88 - height - GetViewportHeight(sheet, viewport4) / 2);
+                                        height = height + GetViewportHeight(sheet, viewport4) / 2;
+                                    }
+                                    catch (Exception ex) { ShowException("Could not place schedule4 on a sheet", ex); }
+
+                                    try
+                                    {
+                                        ScheduleSheetInstance viewport5 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule5.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport5, schedule5, sheet, 0.242, 0.87 - height - GetViewportHeight(sheet, viewport5) / 2);
+                                        height = height + GetViewportHeight(sheet, viewport5) / 2;
+                                    }
+                                    catch (Exception ex) { ShowException("Could not place schedules5 on a sheet", ex); }
+                                    try
+                                    {
+                                        ScheduleSheetInstance viewport6 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule6.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport6, schedule6, sheet, 0.242, 0.87 - height - GetViewportHeight(sheet, viewport6) * 2);
+                                    }
+                                    catch (Exception ex) { ShowException("Could not place schedules5 on a sheet", ex); }
+
+                                    try
+                                    {
+                                        ScheduleSheetInstance viewport7 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule6.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport7, schedule7, sheet, 0.7, 0.70);
+                                    }
+                                    catch (Exception ex) { ShowException("Could not place schedules5 on a sheet", ex); }
+                                    try
+                                    {
+                                        ScheduleSheetInstance viewport8 = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule6.Id, XYZ.Zero);
+                                        ChangeViewportPlaceOnSheet(viewport8, schedule8, sheet, 0.7, 0.70 - GetViewportHeight(sheet, viewport8));
+                                    }
+                                    catch (Exception ex) { ShowException("Could not place schedules5 on a sheet", ex); }
+
+
+                                    transaction.Commit();
+                                }
+                                catch (Exception ex) { ShowException("Could not place schedules on a sheet", ex); }
+                                // Change the placement of the viewport on the sheet
+                            }
+
                             uiDoc.ActiveView = sheet;
                         }
                         else
@@ -245,6 +426,45 @@ namespace RLP
                     ElementId viewtemplateid = GetViewTemplateId(templateName);
                     // Create the schedule
                     ViewSchedule schedule = AssemblyViewUtils.CreateSingleCategorySchedule(doc, assembly.Id, categoryId, viewtemplateid, true);
+
+
+                    if (schedule == null)
+                    {
+                        TaskDialog.Show("Error", "Failed to create schedule.");
+                        transaction.RollBack();
+                        return null;
+                    }
+
+                    // Set the schedule name
+                    schedule.Name = scheduleName;
+
+                    // Regenerate the document to update the schedule
+                    document.Regenerate();
+
+                    transaction.Commit();
+
+                    uiDoc.ActiveView = schedule;
+
+                    return schedule;
+                }
+                catch (Exception ex) { ShowException("Could not CreateScheduleFromTemplate", ex); return null; }
+            }
+        }
+
+
+        public ViewSchedule CreateScheduleFromTemplate(Autodesk.Revit.DB.Document document, AssemblyInstance assembly, string templateName, string scheduleName)
+        {
+
+            // Create a schedule based on the template
+            using (Transaction transaction = new Transaction(document, "Create Schedule"))
+            {
+                try
+                {
+                    transaction.Start();
+
+                    ElementId viewtemplateid = GetViewTemplateId(templateName);
+                    // Create the schedule
+                    ViewSchedule schedule = AssemblyViewUtils.CreateMaterialTakeoff(doc, assembly.Id, viewtemplateid, true);
 
 
                     if (schedule == null)
@@ -378,7 +598,6 @@ namespace RLP
         {
             try
             {
-
                 // Get the parameters by name
                 Parameter parameter1 = sheet.LookupParameter("ADSK_Штамп_Раздел проекта");
                 Parameter parameter2 = sheet.LookupParameter("ADSK_Штамп_Наименование объекта");
@@ -426,27 +645,44 @@ namespace RLP
                 try
                 {
                     // Place the schedule on the view
-                    Viewport viewport = Viewport.Create(sheet.Document, sheet.Id, schedule.Id, XYZ.Zero);
-                    ChangeViewportPlaceOnSheet(viewport, schedule, sheet, 0.2, 0.9);
+                    ScheduleSheetInstance viewport = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, schedule.Id, XYZ.Zero);
+                    ChangeViewportPlaceOnSheet(viewport, schedule, sheet, 0.242, 0.88);
                 }
-                catch (Exception ex) { ShowException("SetSheetParameterValues", ex);  }
+                catch (Exception ex) { ShowException("Заголовок для спецификаций", ex);  }
                 transaction.Commit();
             }
             
         }
-        public double GetViewportHeight(ViewSheet sheet, Viewport viewport)
+        public void SetParameterValue(View view, string parameterName, string parameterValue)
+        {
+            // Get the parameter by name
+            Parameter parameter = view.LookupParameter(parameterName);
+
+            // Check if the parameter exists and is writable
+            if (parameter != null && !parameter.IsReadOnly)
+            {
+                // Set the parameter value
+                using (Transaction transaction = new Transaction(view.Document, "Set Parameter Value"))
+                {
+                    transaction.Start();
+                    parameter.Set(parameterValue);
+                    transaction.Commit();
+                }
+            }
+        }
+        public double GetViewportHeight(ViewSheet sheet, ScheduleSheetInstance viewport)
         {
             // Get the bounding box of the viewport on the sheet
-            var viewportBox = viewport.GetBoxOutline();
+            var viewportBox = viewport.get_BoundingBox(sheet);
 
-            var minPoint = viewportBox.MinimumPoint;
-            var maxPoint = viewportBox.MaximumPoint;
+            var minPoint = viewportBox.Min;
+            var maxPoint = viewportBox.Max;
 
             // Calculate and return the height of the viewport
             double viewportHeight = maxPoint.Y - minPoint.Y;
             return viewportHeight;
         }
-        public void ChangeViewportPlaceOnSheet(Viewport viewport, View view, ViewSheet sheet, double x, double y)
+        public void ChangeViewportPlaceOnSheet(ScheduleSheetInstance viewport, View view, ViewSheet sheet, double x, double y)
         {
             BoundingBoxXYZ boundingBox = sheet.get_BoundingBox(null);
             XYZ minPoint = boundingBox.Min;
@@ -455,10 +691,10 @@ namespace RLP
             XYZ vectorLlegend1 = new XYZ((-sheet.Outline.Max.U + sheet.Outline.Min.U) * x, (+sheet.Outline.Max.V - sheet.Outline.Min.V) * y, 0);
             viewport.Location.Move(vectorLlegend1);
         }
-        public Viewport GetViewportAndParameters(ViewSheet sheet, ViewSchedule view, double x, double y)
+        public ScheduleSheetInstance GetViewportAndParameters(ViewSheet sheet, ViewSchedule view, double x, double y)
         {
             // Create the viewport on the sheet
-            Viewport viewport = Viewport.Create(sheet.Document, sheet.Id, view.Id, XYZ.Zero);
+            ScheduleSheetInstance viewport = ScheduleSheetInstance.Create(sheet.Document, sheet.Id, view.Id, XYZ.Zero);
 
             // Calculate the height of the viewport
             double viewportHeight = GetViewportHeight(sheet, viewport);
